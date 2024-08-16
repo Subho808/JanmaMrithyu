@@ -2,7 +2,7 @@
   "name": "verticalmenu-icon-sidebar",
   "version": "0.1.0",
   "homepage": "/",
-  "main":"index.js",
+  "main": "index.js",
   "private": true,
   "dependencies": {
     "@coreui/react": "^4.1.2",
@@ -17,8 +17,6 @@
     "@fullcalendar/react": "^5.11.0",
     "@fullcalendar/timegrid": "^5.11.0",
     "@gsebdev/react-simple-datepicker": "^1.0.21",
-    "@material-ui/core": "^4.12.4",
-    "@mobiscroll/react-lite": "^4.10.9",
     "@mui/icons-material": "^5.14.1",
     "@mui/lab": "^5.0.0-alpha.76",
     "@mui/material": "^5.14.1",
