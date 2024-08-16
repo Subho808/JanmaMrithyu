@@ -1,0 +1,15 @@
+/* src/components/Captcha.css */
+div[style*="captcha-text"] {
+    display: none;
+  }
+  .captcha-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .reload-button {
+    margin-left: 10px;
+    
+  }
+    
