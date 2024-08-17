@@ -98,13 +98,13 @@ const logOut=async()=>{
               className="header-logo"
             >
               <img
-              style={{height:"3.2rem"}}
+              style={{height:"3rem"}}
                 src={require("../../assets/images/brand/logo-3.png")}
                 className="mobile-logo logo-1"
                 alt="logo"
               />
               <img
-              style={{height:"3.2rem"}}
+              style={{height:"3rem"}}
                 src={require("../../assets/images/brand/logo-3.png")}
                 className="mobile-logo dark-logo-1"
                 alt="logo"
