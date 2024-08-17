@@ -28,6 +28,7 @@ export default function App() {
       <TabToTop />
       <div className="page">
         <div className="page-main">
+        <h4 style={{visibility: "hidden"}}>janma certificate</h4>
           <Header />
           {<Sidebar />}
           <div className="main-content app-content">

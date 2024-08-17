@@ -81,12 +81,17 @@ const logOut=async()=>{
     <Navbar expand="md" className="app-header header sticky">
       <Container fluid className="main-container">
         <div className="d-flex align-items-center">
-          { <div
-            aria-label="Hide Sidebar"
-            className="app-sidebar__toggle"
-            to="#"
-            onClick={() => openCloseSidebar()}
-          ></div>}
+          { <div className="d-flex align-items-center">
+            <div
+              aria-label="Hide Sidebar"
+              className="app-sidebar__toggle"
+              to="#"
+              onClick={() => openCloseSidebar()}
+            ></div>
+            <div className="ms-3">
+            <h5>Janma-Mrityu Tathya</h5>
+            </div>
+          </div>}
           <div className="responsive-logo">
             <Link
               //  to={`${process.env.PUBLIC_URL}/dashboard/`}

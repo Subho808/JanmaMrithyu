@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.scss";
+import JanmaMrityutathyaPage from './pages/JanmaMrityutathyaPage';
 
 import {
   BrowserRouter,
@@ -374,6 +375,7 @@ const Root = () => {
         <React.Suspense fallback={Loaderimg()}>
           <Routes>
             <Route path={`${process.env.PUBLIC_URL}/`} element={<App />}>
+            <Route path="/janma-mrityutathya" element={<JanmaMrityutathyaPage />} />
               <Route
                 path={`${process.env.PUBLIC_URL}/dashboard`}
                 element={<Dashboard />}
