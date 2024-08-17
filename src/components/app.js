@@ -7,7 +7,7 @@ import RightSidebar from "../layouts/RightSidebar/RightSidebar";
 import * as Switcherdata from "../data/Switcher/Switcherdata";
 import { Outlet } from "react-router-dom";
 import TabToTop from "../layouts/TabToTop/TabToTop";
-
+import { Helmet } from "react-helmet";
 export default function App() {
   const sideBarAccess = sessionStorage.getItem("sideBarAccess");
 
@@ -25,9 +25,15 @@ export default function App() {
 
   return (
     <div className="horizontalMenucontainer">
+     <Helmet>
+        <title>birth death certificate</title>
+        <meta name="description" content="west bengal birth certificate download" />
+        <meta name="keywords" content=" janma praman patra, west bengal birth certificate, mrityu praman patra" />
+      </Helmet>
       <TabToTop />
       <div className="page">
         <div className="page-main">
+        
         <h4 style={{visibility: "hidden"}}>janma certificate</h4>
           <Header />
           {<Sidebar />}

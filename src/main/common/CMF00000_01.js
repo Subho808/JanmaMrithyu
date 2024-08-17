@@ -12,6 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MsgAlert from "./MsgAlert";
 import Countdown from "react-countdown";
 import Captcha from "./Capcha";
+import { Helmet } from 'react-helmet';
+
 // import { loadCaptchaEnginge, LoadCanvasTemplate, LoadCanvasTemplateNoReload, validateCaptcha } from 'react-simple-captcha';
 //import {isAutenticated} from "./common"
 let chngLogNo = "";
@@ -154,6 +156,11 @@ console.log(loginMsg);
   return (
     <div className="login-img">
       <div className="page">
+      <Helmet>
+        <title>Janma Mrityutathya - In-depth Insights on Life and Death</title>
+        <meta name="description" content="Explore comprehensive insights on Janma-Mrityutathya, covering life and death concepts in detail." />
+        <meta name="keywords" content="janma mrityutathya, life and death, birth and death facts" />
+      </Helmet>
         <div className="dropdown float-end custom-layout">
           <div
             className="demo-icon nav-link icon mt-4 bg-warning"
