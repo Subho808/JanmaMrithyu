@@ -89,7 +89,7 @@ const logOut=async()=>{
               onClick={() => openCloseSidebar()}
             ></div>
             <div className="ms-3">
-            <h5>Janma-Mrityu Tathya</h5>
+            <h5>Janma-Mrityu Tathya, Govt of West Bengal</h5>
             </div>
           </div>}
           <div className="responsive-logo">
