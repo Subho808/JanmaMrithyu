@@ -4,10 +4,14 @@ import{Row,Col} from "react-bootstrap"
 const Footer = () => {
 return(
 <div className="footer">
-			<div className="container">
-				<Row className="align-items-center flex-row-reverse">
-					<Col className="text-center" sm={12} md={12} lg={12}>
-						 Copyright © 2024 <Link to="#">Zenax</Link>. Designed by <Link to="#"> RS Company </Link> All rights reserved
+			<div className="">
+				{/* <Row className="flex-row-reverse"> */}
+				<Row className='app-content mt-0'>
+				<Col className="text-left" sm={6} md={6} lg={6}>
+						 Privacy | Terms of Use | Cookies
+					</Col>
+					<Col className="text-right" sm={6} md={6} lg={6}>
+						 Copyright © 2024 <Link to="#">Janma-Mrityu Tathya</Link>. All rights reserved
 					</Col>
 				</Row>
 			</div>

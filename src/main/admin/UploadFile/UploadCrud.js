@@ -78,6 +78,10 @@ const UploadFilesForm = ({
   
 console.log(formData);
   const handleInputChange = (event) => {
+    const {name, value}= event.target;
+    if(name==="certificateNo"){
+      setCharMsg("")
+    }
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
@@ -126,10 +130,16 @@ console.log(formData);
     });
   };
 
-
+const [charMsg, setCharMsg] = useState("")
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (formData.certificateNo.length < 14) {
+      setCharMsg("Certificate number must be at least 14 characters long.");
+      return;
+    } else if (formData.certificateNo.length > 20) {
+      setCharMsg("Certificate number must not exceed 20 characters.");
+      return;
+    }
     const { id, ...obj } = formData;
     const addObj = {
      ...formData,
@@ -275,8 +285,8 @@ console.log(formData);
 
     for (let i = 0; i < files.length; i++) {
       let formData = new FormData();
-      if (files[i].size > 1000 * 1000 * 25) {
-        set_fileErr_msg("File size exceded : 25mb")
+      if (files[i].size > 1000 * 1000 * 2) {
+        set_fileErr_msg("File size exceded : 2mb")
         break;
       } else {
         set_fileErr_msg("")
@@ -332,11 +342,11 @@ useEffect(() => {
         <h4>Upload Files {getFormTitle(mode)}</h4>
 
         <div className="row ">
-          <form className="form-horizontal">
+          <form className="form-horizontal" onSubmit={(e) => handleSubmit(e, mode, data, setData, onClose)}>
            {/* certificate Id */}
            {mode !==1 &&<div className=" row mb-4">
               <label className="col-md-3 form-label">
-                Certificate No<span className="text-red">*</span>
+                Certificate Id<span className="text-red">*</span>
               </label>
               <div className="col-md-9 input-group">
                 <input
@@ -348,6 +358,7 @@ useEffect(() => {
                   onChange={handleInputChange}
                   disabled={mode === 3 || mode === 4}
                   readOnly
+
                 />
               </div>
             </div>}
@@ -356,18 +367,31 @@ useEffect(() => {
               <label className="col-md-3 form-label">
                 Certificate No<span className="text-red">*</span>
               </label>
-              <div className="col-md-9 input-group">
+              <div className="col-md-9">
+              <div className="input-group">
                 <input
                   className="form-control ui_displayd_txt_"
                   type="text"
                   placeholder=""
+                  maxLength={20}
                   name="certificateNo"
                   value={formData.certificateNo}
                   onChange={handleInputChange}
                   disabled={mode === 3 || mode === 4}
                  required
+                 onFocus={() => toggleCharCountVisibility("certificateNo")}
+                  onBlur={() => toggleCharCountVisibility("certificateNo")}
                 />
+                {fieldCharCountVisibility.certificateNo && (
+                  <span className="input-group-text">
+                    {formData.certificateNo.length}/20
+                  </span>
+                )}
               </div>
+              <div className="text-red text-center">{charMsg}</div>
+              </div>
+              
+              
             </div>
             {/* Name */}
             <div className=" row mb-4 ">
@@ -581,7 +605,6 @@ useEffect(() => {
             {mode !== 4 && (
               <button
                 type="submit"
-                onClick={(e) => handleSubmit(e, mode, data, setData, onClose)}
                 className="btn btn-primary"
               >
                 {buttonTitle}

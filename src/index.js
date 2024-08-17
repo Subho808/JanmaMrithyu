@@ -46,6 +46,9 @@ const GetAllUser = React.lazy(() =>
 const CreateUser = React.lazy(() =>
   import("./main/admin/CreateUser/CreateUser")
 );
+const ForgotPass = React.lazy(() =>
+  import("./main/common/ForgotPass")
+);
 
 const ContentScrollBar = React.lazy(() =>
   import("./components/Components/ContentScrollBar/ContentScrollBar")
@@ -414,6 +417,7 @@ const Root = () => {
                   path={`${process.env.PUBLIC_URL}/CreateUser`}
                   element={<CreateUser />}
                 />
+                
                 
 
                 
@@ -877,9 +881,9 @@ const Root = () => {
                 element={<Register />}
               />
               <Route
-                path={`${process.env.PUBLIC_URL}/custompages/forgotPassword`}
-                element={<ForgotPassword />}
-              />
+                  path={`${process.env.PUBLIC_URL}/ForgotPass`}
+                  element={<ForgotPass />}
+                />
               <Route
                 path={`${process.env.PUBLIC_URL}/custompages/lockScreen`}
                 element={<LockScreen />}
