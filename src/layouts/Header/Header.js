@@ -88,8 +88,8 @@ const logOut=async()=>{
               to="#"
               onClick={() => openCloseSidebar()}
             ></div>
-            <div className="ms-3">
-            <h5>Janma-Mrityu Tathya, Govt of West Bengal</h5>
+            <div className="header-text ms-3">
+            <h5>Janma-Mrityu Tathya</h5>
             </div>
           </div>}
           <div className="responsive-logo">
@@ -98,11 +98,13 @@ const logOut=async()=>{
               className="header-logo"
             >
               <img
+              style={{height:"3.2rem"}}
                 src={require("../../assets/images/brand/logo-3.png")}
                 className="mobile-logo logo-1"
                 alt="logo"
               />
               <img
+              style={{height:"3.2rem"}}
                 src={require("../../assets/images/brand/logo-3.png")}
                 className="mobile-logo dark-logo-1"
                 alt="logo"

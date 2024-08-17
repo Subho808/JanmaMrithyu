@@ -29384,7 +29384,15 @@ body.rtl {
     }
 }
 
+@media (max-width: 992px){
+    .header-text {
+        visibility: hidden;
+        display: none;
+    }
+}
+
 @media (min-width: 992px) {
+    
     .rtl .offset-lg-0 {
         margin-left: 0;
         margin-right: inherit;
