@@ -3,7 +3,7 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { generateCsv } from 'export-to-csv';
+import { ExportToCsv } from 'export-to-csv';
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import {
   Tabs,
@@ -108,7 +108,7 @@ const GetAllUser = () => {
   };
 
   //csv files
-  const csvExporter = generateCsv(csvOptions);
+  const csvExporter = new ExportToCsv(csvOptions);
 
   //functions
   const handleExportRows = (rows) => {

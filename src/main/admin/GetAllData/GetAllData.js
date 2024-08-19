@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
-import { generateCsv } from "export-to-csv";
+import { ExportToCsv, generateCsv } from "export-to-csv";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { Modal, ModalTitle } from "react-bootstrap";
 import {
@@ -213,7 +213,7 @@ const GetAllRecords = () => {
   };
 
   //csv files
-  const csvExporter = generateCsv(csvOptions);
+  const csvExporter = new ExportToCsv(csvOptions);
 
   //functions
   const handleExportRows = (rows) => {

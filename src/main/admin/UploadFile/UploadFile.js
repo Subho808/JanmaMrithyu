@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import { generateCsv } from "export-to-csv";
+import { ExportToCsv } from "export-to-csv";
 import CloseIcon from "@mui/icons-material/Close";
 import FileOpenIcon from "@mui/icons-material/FileOpen";
 import FileDownload from "@mui/icons-material/FileDownload";
@@ -303,7 +303,7 @@ const UploadFiles = () => {
     headers: columns.map((c) => c.header),
   };
 
-  const csvExporter = generateCsv(csvOptions);
+  const csvExporter = new ExportToCsv(csvOptions);
 
   return (
     <>

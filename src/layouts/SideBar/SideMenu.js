@@ -12,17 +12,17 @@ export const MENUITEM = [
           {
             path: `${process.env.PUBLIC_URL}/CreateUser`,
             type: "link",
-            title: "User",
+            title: "Create User",
           },
           {
             path: `${process.env.PUBLIC_URL}/GetAllUser`,
             type: "link",
-            title: "Get All Users",
+            title: "All Users Information",
           },
           {
             path: `${process.env.PUBLIC_URL}/UploadFile`,
             type: "link",
-            title: "Upload Files",
+            title: "Upload Certificate",
           },
         
          

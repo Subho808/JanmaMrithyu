@@ -34,6 +34,10 @@ const CardDesign = React.lazy(() =>
   import("./components/Components/CardDesign/CardDesign")
 );
 
+
+
+
+// JanmaMrityu Tathya
 const GetAllRecords = React.lazy(() =>
   import("./main/admin/GetAllData/GetAllData")
 );
@@ -49,6 +53,14 @@ const CreateUser = React.lazy(() =>
 const ForgotPass = React.lazy(() =>
   import("./main/common/ForgotPass")
 );
+const ContactUs = React.lazy(() =>
+  import("./main/common/ContactUs")
+);
+
+
+
+
+// JanmaMrityu Tathya
 
 const ContentScrollBar = React.lazy(() =>
   import("./components/Components/ContentScrollBar/ContentScrollBar")
@@ -458,6 +470,10 @@ const Root = () => {
 <Route
   path={`${process.env.PUBLIC_URL}/CreateUser`}
   element={<Private><CreateUser /></Private>}
+/>
+<Route
+  path={`${process.env.PUBLIC_URL}/ContactUs`}
+  element={<ContactUs />}
 />
 <Route
   path={`${process.env.PUBLIC_URL}/GetAllUser`}

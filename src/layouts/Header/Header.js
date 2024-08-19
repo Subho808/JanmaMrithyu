@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dropdown, Navbar, Container, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { getApiToken, getScplAdContext } from "../../main/common/common";
 import Axios from "axios";
+import ContactUs from "../../main/common/ContactUs";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 const headers = { Authorization: "Bearer " + getApiToken() };
 export function Header() {
   //full screen
-  const name= getScplAdContext().user.name;
-  const email= getScplAdContext().user.email;
+  const name = getScplAdContext().user.name;
+  const email = getScplAdContext().user.email;
+const [dialogOpen, setDialogOpen] = useState(false)
+
+
 
   const navigate = useNavigate();
   function Fullscreen() {
@@ -58,30 +65,33 @@ export function Header() {
   };
   const sideBarAccess = sessionStorage.getItem("sideBarAccess");
   console.log(sideBarAccess);
-const logOut=async()=>{
-  await Axios
-  .post(
-    process.env.REACT_APP_API_URL_PREFIX + `/api/v1/auth/logout`,null,
-    { headers }
-  )
-  .then((res) => {
-    navigate(process.env.PUBLIC_URL + "/")
-    // if (res.data) {
-      
-    // } else {
-      
-    // }
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-}
+  const logOut = async () => {
+    await Axios
+      .post(
+        process.env.REACT_APP_API_URL_PREFIX + `/api/v1/auth/logout`, null,
+        { headers }
+      )
+      .then((res) => {
+        navigate(process.env.PUBLIC_URL + "/")
+        // if (res.data) {
 
+        // } else {
+
+        // }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const ContactUsOpen=()=>{
+    setDialogOpen(true)
+  }
   return (
     <Navbar expand="md" className="app-header header sticky">
       <Container fluid className="main-container">
         <div className="d-flex align-items-center">
-          { <div className="d-flex align-items-center">
+          {<div className="d-flex align-items-center">
             <div
               aria-label="Hide Sidebar"
               className="app-sidebar__toggle"
@@ -89,7 +99,7 @@ const logOut=async()=>{
               onClick={() => openCloseSidebar()}
             ></div>
             <div className="header-text ms-3">
-            <h5>Janma-Mrityu Tathya</h5>
+              <h5>Janma-Mrityu Tathya</h5>
             </div>
           </div>}
           <div className="responsive-logo">
@@ -98,13 +108,13 @@ const logOut=async()=>{
               className="header-logo"
             >
               <img
-              style={{height:"3rem"}}
+                style={{ height: "3rem" }}
                 src={require("../../assets/images/brand/logo-3.png")}
                 className="mobile-logo logo-1"
                 alt="logo"
               />
               <img
-              style={{height:"3rem"}}
+                style={{ height: "3rem" }}
                 src={require("../../assets/images/brand/logo-3.png")}
                 className="mobile-logo dark-logo-1"
                 alt="logo"
@@ -116,13 +126,13 @@ const logOut=async()=>{
             to={`${process.env.PUBLIC_URL}/dashboard/`}
           >
             <img
-            style={{height:"4rem"}}
+              style={{ height: "4rem" }}
               src={require("../../assets/images/brand/logo-3.png")}
               className="header-brand-img desktop-logo"
               alt="logo"
             />
             <img
-             style={{height:"4rem"}}
+              style={{ height: "4rem" }}
               src={require("../../assets/images/brand/logo-3.png")}
               className="header-brand-img light-logo1"
               alt="logo"
@@ -138,7 +148,7 @@ const logOut=async()=>{
               <i className="fa fa-search" aria-hidden="true"></i>
             </Button> */}
             <img
-            style={{height:"4rem"}}
+              style={{ height: "4rem" }}
               src={require("../../assets/images/brand/logo-3.png")}
               className="header-brand-img desktop-logo"
               alt="logo"
@@ -405,8 +415,8 @@ const logOut=async()=>{
                       variant=""
                     >
                       <div className="avatar  profile-user brround cover-image mini-prof-text">
-                          <span>{getScplAdContext()?.user?.name[0]?.toUpperCase()}</span>
-                        </div>
+                        <span>{getScplAdContext()?.user?.name[0]?.toUpperCase()}</span>
+                      </div>
                     </Dropdown.Toggle>
                     <Dropdown.Menu
                       className="dropdown-menu-end dropdown-menu-arrow"
@@ -422,9 +432,16 @@ const logOut=async()=>{
                       <div className="dropdown-divider m-0"></div>
                       <Dropdown.Item
                         // href={`${process.env.PUBLIC_URL}/custompages/login/`}
+                        onClick={ContactUsOpen}
+                      >
+                        <i className="dropdown-icon fe fe-send"></i>
+                        Contact Us
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        // href={`${process.env.PUBLIC_URL}/custompages/login/`}
                         onClick={logOut}
                       >
-                        <i className="dropdown-icon fe fe-alert-circle"></i>
+                        <i className="dropdown-icon fe fe-log-out"></i>
                         Sign out
                       </Dropdown.Item>
                     </Dropdown.Menu>
@@ -447,6 +464,20 @@ const logOut=async()=>{
             >
               <i className="fe fe-settings fa-spin"></i>
             </div> */}
+            {/* For ContactUs */}
+            <ContactUsModal
+
+              open={dialogOpen}
+              onClose={() =>
+                setDialogOpen(false)
+              }
+
+            />
+
+
+
+
+
           </div>
         </div>
       </Container>
@@ -455,3 +486,36 @@ const logOut=async()=>{
 }
 
 export default Header;
+export const ContactUsModal = ({ onClose, open }) => {
+
+
+  const handleClose = () => {
+    onClose();
+  };
+
+
+  return (
+    <Dialog open={open} fullWidth maxWidth="sm">
+      <DialogTitle sx={{ m: 1, p: 2 }}>
+        {onClose ? (
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon style={{ color: "black" }} />
+          </IconButton>
+        ) : null}
+      </DialogTitle>
+      <DialogContent>
+        <ContactUs />
+      </DialogContent>
+      <DialogActions sx={{ p: "1.25rem" }}></DialogActions>
+    </Dialog>
+  );
+}
