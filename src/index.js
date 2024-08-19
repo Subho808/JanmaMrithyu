@@ -337,7 +337,7 @@ export const Private = ({ children }) => {
   const sidebaraccess = sessionStorage.getItem("sideBarAccess");
   const isAuth = isAuthenticated();
 
-  const restrictedPages502 = [`/UploadFile`, `/CreateUser`, `/GetAllUser`, `/GetAllData`];
+  const restrictedPages502 = [`/UploadFile`, `/CreateUser`, `/GetAllUser`];
   // const restrictedPages501 = [`/GetAllData`];
 
   if (!isAuth) {
