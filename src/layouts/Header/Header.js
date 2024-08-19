@@ -65,7 +65,7 @@ const logOut=async()=>{
     { headers }
   )
   .then((res) => {
-    navigate(process.env.PUBLIC_URL + "/CMF00000/login")
+    navigate(process.env.PUBLIC_URL + "/")
     // if (res.data) {
       
     // } else {

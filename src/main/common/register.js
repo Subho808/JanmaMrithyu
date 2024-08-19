@@ -19,16 +19,29 @@ export default function Register() {
     email: "",
     name: "",
     password: "",
+    confpass:""
   });
-
+  const [errorMsg, set_errorMsg] = useState({ pass: "" });
   const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if(name==="confpass"){
+        set_errorMsg({...errorMsg, pass:""})
+    }
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    if (formData.confpass !== formData.password) {
+      set_errorMsg({
+        ...errorMsg,
+        pass: "The passwords you entered do not match. Please try again.",
+      });
+      return;
+    }
+    const {confpass, ...obj}=formData
     let regObj = {
-      ...formData,
+      ...obj,
     };
     await axios
       .post(
@@ -38,7 +51,7 @@ export default function Register() {
       .then((res) => {
         console.log(res.data);
         if (res.data) {
-          navigate(process.env.PUBLIC_URL + "/CMF00000/login");
+          navigate(process.env.PUBLIC_URL + "/");
         } else {
           setMsg("Already Registered");
           setMsgTyp("AE");
@@ -59,19 +72,19 @@ export default function Register() {
   return (
     <div className="login-img">
       <div className="page">
-        <div className="dropdown float-end custom-layout">
+        {/* <div className="dropdown float-end custom-layout">
           <div
             className="demo-icon nav-link icon mt-4 bg-warning"
             onClick={() => custompagesswitcherdata.Swichermainright()}
           >
             <i className="fe fe-settings fa-spin text_primary"></i>
           </div>
-        </div>
+        </div> */}
         <div
           className=""
           onClick={() => custompagesswitcherdata.Swichermainrightremove()}
         >
-          <div className="col col-login mx-auto">
+          <div className="col-log-6 col-login">
             <div className="text-center">
               <img
                 style={{ height: "5rem" }}
@@ -84,16 +97,18 @@ export default function Register() {
           <div className="container-login100">
             <div className="wrap-login100 p-0">
               <Card.Body>
+              <span className="login100-form-title">Registration</span>
+
                 <form
-                  className="login100-form validate-form"
                   onSubmit={handleRegister}
                 >
-                  <span className="login100-form-title">Registration</span>
+                 
                   <div className="wrap-input100 validate-input">
                     <input
                       className="input100"
                       type="text"
                       name="name"
+                      size={30}
                       placeholder="User name"
                       onChange={handleInputChange}
                     />
@@ -102,19 +117,7 @@ export default function Register() {
                       <i className="mdi mdi-account" aria-hidden="true"></i>
                     </span>
                   </div>
-                  <div className="wrap-input100 validate-input">
-                    <input
-                      className="input100"
-                      type="text"
-                      name="password"
-                      placeholder="Password"
-                      onChange={handleInputChange}
-                    />
-                    <span className="focus-input100"></span>
-                    <span className="symbol-input100">
-                      <i className="zmdi zmdi-lock" aria-hidden="true"></i>
-                    </span>
-                  </div>
+                
 
                   <div className="wrap-input100 validate-input">
                     <input
@@ -134,9 +137,40 @@ export default function Register() {
                     <input
                       className="input100"
                       type="text"
+                      name="password"
+                      placeholder="Password"
+                      onChange={handleInputChange}
+                      size={30}
+                    />
+                    <span className="focus-input100"></span>
+                    <span className="symbol-input100">
+                      <i className="zmdi zmdi-lock" aria-hidden="true"></i>
+                    </span>
+                  </div>
+
+                  <div className="wrap-input100 validate-input">
+                    <input
+                      className="input100"
+                      type="text"
+                      name="confpass"
+                      placeholder="Confirm Password"
+                      onChange={handleInputChange}
+                      size={30}
+                    />
+                    <span className="focus-input100"></span>
+                    <span className="symbol-input100">
+                      <i className="zmdi zmdi-lock" aria-hidden="true"></i>
+                    </span>
+                  </div>
+
+                  <div className="wrap-input100 validate-input">
+                    <input
+                      className="input100"
+                      type="text"
                       name="about"
                       onChange={handleInputChange}
-                      placeholder="About"
+                      size={30}
+                      placeholder="Prupose"
                     />
                     <span className="focus-input100"></span>
                     <span className="symbol-input100">
@@ -146,7 +180,11 @@ export default function Register() {
                       ></i>
                     </span>
                   </div>
-
+                  {errorMsg.pass ? (
+                        <div className="text-red text-center">{errorMsg.pass}</div>
+                      ) : (
+                        ""
+                      )}
                   <div className="container-login100-form-btn">
                     <button
                       type="submit"
@@ -160,7 +198,7 @@ export default function Register() {
                     <p className="text-dark mb-0">
                       Already have an account?
                       <Link
-                        to={`${process.env.PUBLIC_URL}/CMF00000/login`}
+                        to={`${process.env.PUBLIC_URL}/`}
                         className="text-primary ms-1"
                       >
                         Sign In

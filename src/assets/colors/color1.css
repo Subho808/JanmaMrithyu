@@ -434,7 +434,7 @@ a.text-primary:focus {
 }
 
 .login-img {
-    background: var(--primary-bg-color);
+    /* background: var(--primary-bg-color); */
 }
 
 .avatar {

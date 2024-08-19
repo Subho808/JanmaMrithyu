@@ -162,14 +162,19 @@ const GetAllUser = () => {
         .then((res) => {
           if (res.data?.length) {
             setTableData(res.data);
+            setMsg("Records Found");
+          setMsgTyp("AI");
           } else {
             setTableData([]);
+            setMsg("No Records Found");
+            setMsgTyp("AI");
           }
 
         })
         .catch((error) => {
           console.log(error);
-          // setMsg(error.message)
+          setMsg(error.response.data.message);
+        setMsgTyp("AE");
         });
     };
     postQuery();

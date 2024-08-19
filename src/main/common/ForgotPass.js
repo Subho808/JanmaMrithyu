@@ -131,16 +131,20 @@ export default function ForgotPass() {
         </div> */}
         <div className="">
           <div
-            className="col col-login mx-auto"
+            className=""
             onClick={() => custompagesswitcherdata.Swichermainrightremove()}
           >
-            <div className="text-center">
+          <div className="col-log-6 col-login">
+          <div className="text-center">
               <img
+              style={{height: "5rem"}}
                 src={require("../../assets/images/brand/govt2.png")}
                 className="header-brand-img"
                 alt=""
               />
             </div>
+          </div>
+            
           </div>
           <div className="container-login100">
             <Row>
@@ -252,7 +256,7 @@ export default function ForgotPass() {
                           Forgot It?
                           <Link
                             className="text-primary ms-1"
-                            to={`${process.env.PUBLIC_URL}/CMF00000/login`}
+                            to={`${process.env.PUBLIC_URL}/`}
                           >
                             Login
                           </Link>

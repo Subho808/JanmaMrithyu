@@ -290,7 +290,7 @@ const GetAllRecords = () => {
               <div className="row mb-4">
                 <div className="col-md-9 input-group mb-2">
                   <label className="col-md-3 form-label">
-                    <b>Certificate ID:</b>
+                    <b>Certificate No:<span className="text-red">*</span></b>
                   </label>
                   <div className="col-md-9">
                     <input
@@ -300,6 +300,7 @@ const GetAllRecords = () => {
                       name="certificateNo"
                       onChange={handleQryInputChange}
                       value={queryInputObj?.certificateNo}
+                      required
                     />
                   </div>
                 </div>

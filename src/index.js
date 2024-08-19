@@ -10,7 +10,7 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom";
-import { isAuthenticated } from "./main/common/common";
+import { isAuthenticated, sideBarAccess } from "./main/common/common";
 import "./assets/css/coustom.css"
 const Switcherlayout = React.lazy(() => import("./components/switcherlayout"));
 //App
@@ -333,32 +333,78 @@ const Errorpage503 = React.lazy(() =>
 //   return flg ? children : <Navigate to={`${process.env.PUBLIC_URL}/`} />;
 // };
 
+export const Private = ({ children }) => {
+  const sidebaraccess = sessionStorage.getItem("sideBarAccess");
+  const isAuth = isAuthenticated();
 
+  const restrictedPages502 = [`/UploadFile`, `/CreateUser`, `/GetAllUser`, `/GetAllData`];
+  // const restrictedPages501 = [`/GetAllData`];
 
-
-
-export const Private = ({ path, children }) => {
-  let accessArr= sessionStorage.getItem("sidebarlinkList")
-  
-  if(accessArr){
-    try {
-      accessArr = JSON.parse(accessArr)
-      accessArr = [...accessArr]
-    } catch (error) {
-      console.log(error, "while parsing accessArr");
-    }
+  if (!isAuth) {
+    // Redirect to login if not authenticated
+    return <Navigate to={`${process.env.PUBLIC_URL}/`} />;
   }
-  else accessArr = []
 
-  console.log(accessArr);
-  const flg = isAuthenticated();
-  const haveAccess = accessArr?.find((element) => element?.path === path);
-  if(flg){
-    if(haveAccess || !accessArr?.length) return children
-    else return <Errorpage400 />
+  if (sidebaraccess === "502" && restrictedPages502.includes(window.location.pathname)) {
+    return <Navigate to={`${process.env.PUBLIC_URL}/GetAllData`} />;
   }
-  return <Navigate to={`${process.env.PUBLIC_URL}/`}/>
+
+  // if (sidebaraccess === "501" && restrictedPages501.includes(window.location.pathname)) {
+  //   console.log(window.location.pathname);
+  //   return <Navigate to={`${process.env.PUBLIC_URL}${window.location.pathname}`} />;
+  // }
+
+  // Render the child component if all checks pass
+  return children;
 };
+
+
+
+
+
+// export const Private = ({ path, children }) => {
+//   const sidebaraccess = sessionStorage.getItem("sideBarAccess");
+//   const flg = isAuthenticated();
+//   let Path = `${process.env.PUBLIC_URL}${path}`;
+// console.log("flg", flg, "ss",sidebaraccess ,"pp", Path, "lll", window.location.pathname)
+ 
+//   const restrictedPaths = [
+//     `/GetAllData`,
+//   ];
+
+//   const pagesFor502 = ['/GetAllData'];
+//   const pagesFor501 = ['/UploadFile', '/CreateUser', '/GetAllUser'];
+
+//  // Conditional logic
+//  if (sidebaraccess === 502) {
+
+//   if (pagesFor502.includes(path)) {
+//     <Navigate to={`${process.env.PUBLIC_URL}${path}`}/>
+//   } else {
+//       // Navigate('/default502Page');
+//       <Navigate to={`${process.env.PUBLIC_URL}/GetAllData`} />;
+//   }
+// } else if (sidebaraccess === 501) {
+
+//   if (pagesFor501.includes(path)) {
+//    //loi
+//   } else {
+//       // Navigate('/default501Page');
+//       <Navigate to={`${process.env.PUBLIC_URL}/getAllUsers`} />;
+//   }
+// } else {
+//   // navigate('/errorPage');
+//   <Navigate to={`${process.env.PUBLIC_URL}/errorPage`} />;
+// }
+
+// // return (
+// //   // Your component JSX
+// // );
+
+//   // Redirect to login if not authenticated
+//   return <Navigate to={`${process.env.PUBLIC_URL}/`} />;
+// };
+
 
 const Loaderimg = () => {
   return (
@@ -401,22 +447,23 @@ const Root = () => {
                   element={<CardDesign />}
                 />
 
-                <Route
-                  path={`${process.env.PUBLIC_URL}/GetAllData`}
-                  element={<GetAllRecords />}
-                />
-                <Route
-                  path={`${process.env.PUBLIC_URL}/UploadFile`}
-                  element={<UploadFiles />}
-                />
-                <Route
-                  path={`${process.env.PUBLIC_URL}/GetAllUser`}
-                  element={<GetAllUser />}
-                />
-                <Route
-                  path={`${process.env.PUBLIC_URL}/CreateUser`}
-                  element={<CreateUser />}
-                />
+<Route
+  path={`${process.env.PUBLIC_URL}/GetAllData`}
+  element={<Private><GetAllRecords /></Private>}
+/>
+<Route
+  path={`${process.env.PUBLIC_URL}/UploadFile`}
+  element={<Private><UploadFiles /></Private>}
+/>
+<Route
+  path={`${process.env.PUBLIC_URL}/CreateUser`}
+  element={<Private><CreateUser /></Private>}
+/>
+<Route
+  path={`${process.env.PUBLIC_URL}/GetAllUser`}
+  element={<Private><GetAllUser /></Private>}
+/>
+
                 
                 
 
@@ -873,7 +920,7 @@ const Root = () => {
               />
               <Route index element={<Login />} />
               <Route
-                path={`${process.env.PUBLIC_URL}/CMF00000/login`}
+                path={`${process.env.PUBLIC_URL}/`}
                 element={<Login />}
               />
               <Route

@@ -90,8 +90,8 @@ export default function Login() {
             getUser(rolename).then((res) => {
               let role = res.data.roles[0]?.id;
               role === 501
-                ? navigate(process.env.PUBLIC_URL + "/getAllUser")
-                : navigate(process.env.PUBLIC_URL + "/getAllData");
+                ? navigate(process.env.PUBLIC_URL + "/GetAllUser")
+                : navigate(process.env.PUBLIC_URL + "/GetAllData");
             });
           }
         })
@@ -169,7 +169,7 @@ export default function Login() {
           className=""
           onClick={() => custompagesswitcherdata.Swichermainrightremove()}
         >
-          <div className="col col-login mx-auto">
+          <div className="col-log-6 col-login">
             <div className="text-center">
               <img
                 style={{ height: "5rem" }}

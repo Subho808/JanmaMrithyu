@@ -133,8 +133,8 @@ console.log(formData);
 const [charMsg, setCharMsg] = useState("")
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.certificateNo.length < 14) {
-      setCharMsg("Certificate number must be at least 14 characters long.");
+    if (formData.certificateNo.length < 10) {
+      setCharMsg("Certificate number must be at least 10 characters long.");
       return;
     } else if (formData.certificateNo.length > 20) {
       setCharMsg("Certificate number must not exceed 20 characters.");
@@ -163,6 +163,12 @@ const [charMsg, setCharMsg] = useState("")
           console.log(res.data);
           if (res?.data) {
             fetchData();
+            setDialogObj({
+              status: true,
+              type: "alert",
+              title: "Information",
+              msg: "Please go to the edit option for this record and upload the file."
+            })
             setMsg("Record inserted successfully");
             setMsgTyp("AI");
             resetForm1();
@@ -188,7 +194,7 @@ const [charMsg, setCharMsg] = useState("")
             //TRUE OPERATION
             fetchData();
             setMsg("Record update successful");
-            setMsgTyp("AE");
+            setMsgTyp("AI");
           }
         })
         .catch((error) => {
@@ -198,14 +204,24 @@ const [charMsg, setCharMsg] = useState("")
         });
 
     if (mode === 3) {
-      set_open(true);
+      setDialogObj({
+        status: true,
+        onConfirm: ()=>handleConfirmation(),
+        type: "confirm",
+        title: "Confirmation",
+        msg: "Do you want to delete this record"
+      })
       
     }
   };
-
-  const [open, set_open] = useState(false);
-  const [confirmStatus, setConfirmStatus] = useState(false);
-  const [delStatus, set_delStatus] = useState(false);
+  console.log(msg);
+  
+  const [dialogObj, setDialogObj] = useState({
+    status: false,
+    onConfirm: ()=>{},
+    msg: ""
+  })
+  
   const handleConfirmation = async () => {
     
 
@@ -218,10 +234,10 @@ const [charMsg, setCharMsg] = useState("")
         console.log(res.data);
         if (res?.data) {
           fetchData();
-          setMsg(res.data.message);
+          setMsg("Record deleted successfully");
           setMsgTyp("AI");
         }
-        set_delStatus(true);
+        
       })
       .catch((error) => {
         console.log("error");
@@ -277,16 +293,15 @@ const [charMsg, setCharMsg] = useState("")
   const [doc, set_doc] = useState([]);
   const [fileErr_msg, set_fileErr_msg] = useState("")
   const uploadFiles = async (e, certId) => {
+    
     if (mode > 2) return
 
     const { files } = e.target;
-    const refApiId = mode === 1 ? "SUA00512" : "SUA00499"
-    let fileArr = [];
-
+    console.log(files);
     for (let i = 0; i < files.length; i++) {
       let formData = new FormData();
-      if (files[i].size > 1000 * 1000 * 2) {
-        set_fileErr_msg("File size exceded : 2mb")
+      if (files[i].size > 1000 * 1000 * 1) {
+        set_fileErr_msg("File size exceded : 1mb")
         break;
       } else {
         set_fileErr_msg("")
@@ -323,6 +338,13 @@ const [charMsg, setCharMsg] = useState("")
     }
 
   };
+
+  const delete_file = async (e, i) => {
+    set_doc(doc.filter((item, index) => index !== i));
+  };
+
+
+
 console.log(doc);
 
 const msgRef = useRef(null);
@@ -555,7 +577,7 @@ useEffect(() => {
                   placeholder="Address"
                   required
                   name="address"
-                  maxLength={50}
+                  maxLength={500}
                   onFocus={() => toggleCharCountVisibility("address")}
                   onBlur={() => toggleCharCountVisibility("address")}
                 />
@@ -571,7 +593,7 @@ useEffect(() => {
                 Attach Document<span className="text-red">*</span>
               </label>
               <div className="col-md-9">
-                {(doc[0]?.imageName==="default.png") &&
+                {(doc[0]?.imageName==="default.png"||doc?.length === 0) &&
                   <div className="file-upload">
                     <div className="input-name">Choose File</div>
                    { <input
@@ -596,8 +618,17 @@ useEffect(() => {
                     lable="File"
                     key={i}
                   />}
+                  {mode === 2 && ((file.imageName!=="default.png") &&
+                    <>
+                      <Delete
+                        onClick={(e) => delete_file(e, i)}
+                        className="cross-icon"
+                      />
+                    </>
+                  )}
                 </div>
               ))}
+              {fileErr_msg? <div className="text-red">{fileErr_msg}</div>:""}
               </div>
 
               
@@ -624,16 +655,19 @@ useEffect(() => {
         </div>
 
         
-      <ConfirmDialog
-        title="Confirmation"
-        open={open}
-        setOpen={set_open}
-        onConfirm={handleConfirmation}
-        setConfirmStatus={setConfirmStatus}
-        confirmStatus={confirmStatus}
-      >
-        Are you sure you want to delete this record?
-      </ConfirmDialog>
+        <ConfirmDialog
+  title={dialogObj.title}
+  open={dialogObj.status} 
+  setOpen={(status)=> {setDialogObj({...dialogObj, status: status})}} 
+  onConfirm={dialogObj.onConfirm} 
+  // setConfirmStatus={setConfirmStatus}
+  // confirmStatus={confirmStatus}
+  dialogObj={dialogObj}
+  setDialogObj={setDialogObj}
+  type={dialogObj.type}
+>
+  {(dialogObj.type==="alert"?<div className="text-center pb-4 fs-5">{dialogObj.msg}</div> : <div className=" pb-4 text-center fs-5">{dialogObj.msg}</div>)}
+</ConfirmDialog>
       </div>
     </div>
   );

@@ -179,12 +179,7 @@ export const EditUser = ({
         };
       }),
     };
-    const deleteObj = {
-      apiId: "SUA00099",
-      mst: {
-        modGrpId: formData.modGrpId,
-      },
-    };
+
 
     if (mode === 1)
       await axios
@@ -307,12 +302,6 @@ export const EditUser = ({
   const [confirmStatus, setConfirmStatus] = useState(false);
   const [delStatus, set_delStatus] = useState(false);
   const handleConfirmation = async () => {
-    const deleteObj = {
-      apiId: "SUA00099",
-      mst: {
-        modGrpId: formData.modGrpId,
-      },
-    };
 
     axios.delete(
         process.env.REACT_APP_API_URL_PREFIX +
@@ -321,7 +310,7 @@ export const EditUser = ({
       )
       .then((res) => {
         console.log(res.data);
-        if (!res?.data) {
+        if (res?.data) {
           fetchData();
           setMsg("Record deleted successful");
           setMsgTyp("AI");
@@ -330,6 +319,9 @@ export const EditUser = ({
       })
       .catch((error) => {
         console.log("error");
+        setMsg(error.response.data.message);
+        setMsgTyp("AE");
+
       });
   };
 
@@ -355,7 +347,7 @@ export const EditUser = ({
           className="form-horizontal"
           onSubmit={(e) => handleSubmit(e, mode, data, setData, onClose)}
         >
-          <div className=" row mb-4">
+          {mode!==1 && <div className=" row mb-4">
             <label className="col-md-3 form-label">Id</label>
             <div className="col-md-9">
               <input
@@ -366,7 +358,7 @@ export const EditUser = ({
                 readOnly
               />
             </div>
-          </div>
+          </div>}
           <div className=" row mb-4">
             <label className="col-md-3 form-label">
               Name <span className="text-red">*</span>
