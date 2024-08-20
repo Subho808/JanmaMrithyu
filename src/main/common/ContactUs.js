@@ -13,7 +13,7 @@ const ContactUs = () => {
     setResult(true);
     const formData = new FormData(event.target);
 
-    formData.append("access_key", "8548b7ce-4544-4ffc-85f4-33c2cc3e8cec");
+    formData.append("access_key", "0cb4912f-add6-4bc8-ba21-87e4354d2e1a");
     formData.append("from_name", "Janma-Mrityu Tathya");
     formData.append(
       "subject",
@@ -116,7 +116,7 @@ const resetForm=()=>{
                 />
               </div>
             </div>
-            <input type="hidden" name="redirect" value="https://web3forms.com/success"></input>
+            {/* <input type="hidden" name="redirect" value="https://web3forms.com/success"></input> */}
             {result ? (
               <button className="btn btn-primary" >
         <Spinner

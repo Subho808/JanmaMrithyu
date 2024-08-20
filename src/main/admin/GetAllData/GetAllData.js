@@ -1,11 +1,13 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { ExportToCsv } from "export-to-csv";
 import axios from "axios";
-import { getApiToken } from "../../common/common";
+import { getApiToken, getScplAdContext } from "../../common/common";
 import MsgAlert from "../../common/MsgAlert";
 const headers = { Authorization: "Bearer " + getApiToken() };
 let file = "";
 const GetAllRecords = () => {
+  const userId = getScplAdContext().user.id
+  console.log(userId)
   const [msg, setMsg] = useState("");
   const [msgTyp, setMsgTyp] = useState("");
   const [errExp, set_errExp] = useState({
@@ -13,6 +15,7 @@ const GetAllRecords = () => {
     content: "",
   });
   const [queryInputObj, setQueryInputObj] = useState({
+    userId: userId,
     certificateNo: "",
   });
   const handleQryInputChange = (event) => {
@@ -177,6 +180,7 @@ const GetAllRecords = () => {
   const handleReset = () => {
     setQueryInputObj({
       certificateNo: "",
+      userId: userId
     });
     setTableData2({});
     file = "";
