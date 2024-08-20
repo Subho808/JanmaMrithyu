@@ -9,7 +9,7 @@ import { Delete, Download } from "@mui/icons-material";
 import Smalltag from "../../common/SmallTag/smalltag";
 import moment from "moment/moment";
 const headers = { Authorization: "Bearer " + getApiToken() };
-const userId = getScplAdContext().user.id
+const userId = getScplAdContext().user.id;
 console.log(userId);
 
 const UploadFilesForm = ({
@@ -38,8 +38,7 @@ const UploadFilesForm = ({
   const fetchData = async () => {
     await axios
       .get(
-        process.env.REACT_APP_API_URL_PREFIX +
-          `/api/v1/getAllUpldCertificate`,
+        process.env.REACT_APP_API_URL_PREFIX + `/api/v1/getAllUpldCertificate`,
         { headers }
       )
       .then((res) => {
@@ -49,38 +48,37 @@ const UploadFilesForm = ({
       });
   };
 
-
-
   const [formData, setFormData] = useState({
-      // addedDate: rowData? moment(rowData.addedDate).isValid() ?moment(rowData.addedDate).format("YYYY-MM-DD"):"": "",
-      address: rowData? rowData.address:"",
-      certId: rowData? rowData.certId:0,
-      certificateNo: rowData? rowData.certificateNo:"",
-      // dateOfBirth: rowData? moment(rowData.dateOfBirth).isValid() ?moment(rowData.dateOfBirth).format("YYYY-MM-DD"):"":"",
-      fatherName: rowData? rowData.fatherName:"",
-      gender: rowData? rowData.gender:"",
-      imageName: rowData? rowData.imageName:"",
-      motherName: rowData? rowData.motherName:"",
-      name: rowData? rowData.name:"",
-      addedDate: rowData && moment(rowData.addedDate, "DD-MM-YYYY").isValid() 
-      ? moment(rowData.addedDate, "DD-MM-YYYY").format("YYYY-MM-DD") 
-      : "",
-    dateOfBirth: rowData && moment(rowData.dateOfBirth, "DD-MM-YYYY").isValid() 
-      ? moment(rowData.dateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD") 
-      : "",
-
+    // addedDate: rowData? moment(rowData.addedDate).isValid() ?moment(rowData.addedDate).format("YYYY-MM-DD"):"": "",
+    address: rowData ? rowData.address : "",
+    userId: rowData ? rowData.userId : "",
+    certId: rowData ? rowData.certId : 0,
+    certificateNo: rowData ? rowData.certificateNo : "",
+    // dateOfBirth: rowData? moment(rowData.dateOfBirth).isValid() ?moment(rowData.dateOfBirth).format("YYYY-MM-DD"):"":"",
+    fatherName: rowData ? rowData.fatherName : "",
+    gender: rowData ? rowData.gender : "",
+    imageName: rowData ? rowData.imageName : "",
+    motherName: rowData ? rowData.motherName : "",
+    name: rowData ? rowData.name : "",
+    addedDate:
+      rowData && moment(rowData.addedDate, "DD-MM-YYYY").isValid()
+        ? moment(rowData.addedDate, "DD-MM-YYYY").format("YYYY-MM-DD")
+        : "",
+    dateOfBirth:
+      rowData && moment(rowData.dateOfBirth, "DD-MM-YYYY").isValid()
+        ? moment(rowData.dateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD")
+        : "",
   });
 
   useEffect(() => {
-    set_doc([{imageName: rowData? rowData.imageName:""}])
+    set_doc([{ imageName: rowData ? rowData.imageName : "" }]);
+  }, [rowData]);
 
-  }, [rowData])
-  
-console.log(formData);
+  console.log(formData);
   const handleInputChange = (event) => {
-    const {name, value}= event.target;
-    if(name==="certificateNo"){
-      setCharMsg("")
+    const { name, value } = event.target;
+    if (name === "certificateNo") {
+      setCharMsg("");
     }
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
@@ -103,34 +101,34 @@ console.log(formData);
   };
   const resetForm = () => {
     setFormData({
-      addedDate:"",
-      address:"",
-      certId:0,
-      certificateNo:"",
-      dateOfBirth:"",
-      fatherName:"",
-      gender:"",
-      imageName:"",
-      motherName:"",
-      name:""
+      addedDate: "",
+      address: "",
+      certId: 0,
+      certificateNo: "",
+      dateOfBirth: "",
+      fatherName: "",
+      gender: "",
+      imageName: "",
+      motherName: "",
+      name: "",
     });
   };
   const resetForm1 = () => {
     setFormData({
-      addedDate:"",
-      address:"",
-      certId:0,
-      certificateNo:"",
-      dateOfBirth:"",
-      fatherName:"",
-      gender:"",
-      imageName:"",
-      motherName:"",
-      name:""
+      addedDate: "",
+      address: "",
+      certId: 0,
+      certificateNo: "",
+      dateOfBirth: "",
+      fatherName: "",
+      gender: "",
+      imageName: "",
+      motherName: "",
+      name: "",
     });
   };
 
-const [charMsg, setCharMsg] = useState("")
+  const [charMsg, setCharMsg] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.certificateNo.length < 10) {
@@ -142,23 +140,26 @@ const [charMsg, setCharMsg] = useState("")
     }
     const { id, ...obj } = formData;
     const addObj = {
-     ...formData,
-     dateOfBirth: moment(formData.dateOfBirth).format("DD-MM-YYYY"),
-    }
+      ...formData,
+      dateOfBirth: moment(formData.dateOfBirth).format("DD-MM-YYYY"),
+    };
 
     const editObj = {
       ...formData,
       imageName: doc[0]?.imageName,
       dateOfBirth: moment(formData.dateOfBirth).format("DD-MM-YYYY"),
-    
     };
-
 
     if (mode === 1)
       await axios
-        .post(process.env.REACT_APP_API_URL_PREFIX + `/api/v1/user/${userId}/upldCertificate`, addObj, {
-          headers,
-        })
+        .post(
+          process.env.REACT_APP_API_URL_PREFIX +
+            `/api/v1/user/${formData.userId}/upldCertificate`,
+          addObj,
+          {
+            headers,
+          }
+        )
         .then((res) => {
           console.log(res.data);
           if (res?.data) {
@@ -167,13 +168,12 @@ const [charMsg, setCharMsg] = useState("")
               status: true,
               type: "alert",
               title: "Information",
-              msg: "Please go to the edit option for this record and upload the file."
-            })
+              msg: "Please go to the edit option for this record and upload the file.",
+            });
             setMsg("Record inserted successfully");
             setMsgTyp("AI");
             resetForm1();
           }
-
         })
         .catch((error) => {
           console.log("error");
@@ -184,7 +184,8 @@ const [charMsg, setCharMsg] = useState("")
     if (mode === 2)
       await axios
         .put(
-          process.env.REACT_APP_API_URL_PREFIX + `/api/v1/editUpldCert/${formData.certId}`,
+          process.env.REACT_APP_API_URL_PREFIX +
+            `/api/v1/editUpldCert/${formData.certId}`,
           editObj,
           { headers }
         )
@@ -206,26 +207,24 @@ const [charMsg, setCharMsg] = useState("")
     if (mode === 3) {
       setDialogObj({
         status: true,
-        onConfirm: ()=>handleConfirmation(),
+        onConfirm: () => handleConfirmation(),
         type: "confirm",
         title: "Confirmation",
-        msg: "Do you want to delete this record"
-      })
-      
+        msg: "Do you want to delete this record",
+      });
     }
   };
   console.log(msg);
-  
+
   const [dialogObj, setDialogObj] = useState({
     status: false,
-    onConfirm: ()=>{},
-    msg: ""
-  })
-  
-  const handleConfirmation = async () => {
-    
+    onConfirm: () => {},
+    msg: "",
+  });
 
-    axios.delete(
+  const handleConfirmation = async () => {
+    axios
+      .delete(
         process.env.REACT_APP_API_URL_PREFIX +
           `/api/v1/deleteUpldCert/${formData.certId}`,
         { headers }
@@ -237,7 +236,6 @@ const [charMsg, setCharMsg] = useState("")
           setMsg("Record deleted successfully");
           setMsgTyp("AI");
         }
-        
       })
       .catch((error) => {
         console.log("error");
@@ -291,28 +289,29 @@ const [charMsg, setCharMsg] = useState("")
   };
 
   const [doc, set_doc] = useState([]);
-  const [fileErr_msg, set_fileErr_msg] = useState("")
+  const [fileErr_msg, set_fileErr_msg] = useState("");
   const uploadFiles = async (e, certId) => {
-    
-    if (mode > 2) return
+    if (mode > 2) return;
 
     const { files } = e.target;
     console.log(files);
     for (let i = 0; i < files.length; i++) {
       let formData = new FormData();
       if (files[i].size > 1000 * 1000 * 1) {
-        set_fileErr_msg("File size exceded : 1mb")
+        set_fileErr_msg("File size exceded : 1mb");
         break;
       } else {
-        set_fileErr_msg("")
+        set_fileErr_msg("");
       }
       formData.append("image", files[i]);
 
       //"http://192.168.0.44/SuV4Sa/SUF00134/fileUpload?apiId=" + "SUA00486" + "&refApiId=" + "SUA00499" + "&appId=" + "" + "&mobRegNo=" + "",
       await axios
         .post(
-          process.env.REACT_APP_API_URL_PREFIX + `/api/v1/upldCert/image/upload?certId=${certId}`,
-          formData, { headers }
+          process.env.REACT_APP_API_URL_PREFIX +
+            `/api/v1/upldCert/image/upload?certId=${certId}`,
+          formData,
+          { headers }
         )
         .then((res) => {
           if (res?.data) {
@@ -325,38 +324,38 @@ const [charMsg, setCharMsg] = useState("")
             //   },
             // ];
             set_doc([{ imageName: res.data.imageName }]);
-          }
-          else {
-            setMsg(res?.data?.appMsgList?.list[0]?.errDesc + " (" + res?.data?.appMsgList?.list[0]?.errCd + ")")
-            setMsgTyp(res?.data?.appMsgList?.list[0]?.errType)
-            
+          } else {
+            setMsg(
+              res?.data?.appMsgList?.list[0]?.errDesc +
+                " (" +
+                res?.data?.appMsgList?.list[0]?.errCd +
+                ")"
+            );
+            setMsgTyp(res?.data?.appMsgList?.list[0]?.errType);
           }
         })
         .catch((err) => {
           console.log(err, "err");
         });
     }
-
   };
 
   const delete_file = async (e, i) => {
     set_doc(doc.filter((item, index) => index !== i));
   };
 
+  console.log(doc);
 
-
-console.log(doc);
-
-const msgRef = useRef(null);
-const [viewMsg, set_viewMsg] = useState(false);
-useEffect(() => {
-  if (viewMsg) msgRef?.current?.scrollIntoView({ behavior: "smooth" });
-  set_viewMsg(false);
-}, [viewMsg]);
+  const msgRef = useRef(null);
+  const [viewMsg, set_viewMsg] = useState(false);
+  useEffect(() => {
+    if (viewMsg) msgRef?.current?.scrollIntoView({ behavior: "smooth" });
+    set_viewMsg(false);
+  }, [viewMsg]);
   return (
     <div>
       <div className="container">
-      {msg && (
+        {msg && (
           <div ref={msgRef}>
             <MsgAlert errExp={errExp} msg={msg} msgTyp={msgTyp} />
           </div>
@@ -364,56 +363,78 @@ useEffect(() => {
         <h4>Upload Files {getFormTitle(mode)}</h4>
 
         <div className="row ">
-          <form className="form-horizontal" onSubmit={(e) => handleSubmit(e, mode, data, setData, onClose)}>
-           {/* certificate Id */}
-           {mode !==1 &&<div className=" row mb-4">
-              <label className="col-md-3 form-label">
-                Certificate Id<span className="text-red">*</span>
-              </label>
-              <div className="col-md-9 input-group">
-                <input
-                  className="form-control ui_displayd_txt_"
-                  type="text"
-                  placeholder=""
-                  name="certId"
-                  value={formData.certId}
-                  onChange={handleInputChange}
-                  disabled={mode === 3 || mode === 4}
-                  readOnly
-
-                />
+          <form
+            className="form-horizontal"
+            onSubmit={(e) => handleSubmit(e, mode, data, setData, onClose)}
+          >
+            {/* certificate Id */}
+            {mode !== 1 && (
+              <div className=" row mb-4">
+                <label className="col-md-3 form-label">
+                  Certificate Id<span className="text-red">*</span>
+                </label>
+                <div className="col-md-9 input-group">
+                  <input
+                    className="form-control ui_displayd_txt_"
+                    type="text"
+                    placeholder=""
+                    name="certId"
+                    value={formData.certId}
+                    onChange={handleInputChange}
+                    disabled={mode === 3 || mode === 4}
+                    readOnly
+                  />
+                </div>
               </div>
-            </div>}
+            )}
+            {/* User ID */}
+            {
+              <div className=" row mb-4">
+                <label className="col-md-3 form-label">
+                  User Id<span className="text-red">*</span>
+                </label>
+                <div className="col-md-9 input-group">
+                  <input
+                    className="form-control ui_displayd_txt_"
+                    type="text"
+                    placeholder="User Id"
+                    name="userId"
+                    value={formData.userId}
+                    onChange={handleInputChange}
+                    disabled={mode === 3 || mode === 4}
+                    
+                  />
+                </div>
+              </div>
+            }
             {/* certificate No */}
             <div className=" row mb-4">
               <label className="col-md-3 form-label">
                 Certificate No<span className="text-red">*</span>
               </label>
               <div className="col-md-9">
-              <div className="input-group">
-                <input
-                  className="form-control ui_displayd_txt_"
-                  type="text"
-                  placeholder=""
-                  maxLength={20}
-                  name="certificateNo"
-                  value={formData.certificateNo}
-                  onChange={handleInputChange}
-                  disabled={mode === 3 || mode === 4}
-                 required
-                 onFocus={() => toggleCharCountVisibility("certificateNo")}
-                  onBlur={() => toggleCharCountVisibility("certificateNo")}
-                />
-                {fieldCharCountVisibility.certificateNo && (
-                  <span className="input-group-text">
-                    {formData.certificateNo.length}/20
-                  </span>
-                )}
+                <div className="input-group">
+                  <input
+                    className="form-control ui_displayd_txt_"
+                    type="text"
+                    placeholder="Certificate No"
+                    maxLength={20}
+                    name="certificateNo"
+                    value={formData.certificateNo}
+                    onChange={handleInputChange}
+                    disabled={mode === 3 || mode === 4}
+                    required
+                    onFocus={() => toggleCharCountVisibility("certificateNo")}
+                    onBlur={() => toggleCharCountVisibility("certificateNo")}
+                  />
+                  {fieldCharCountVisibility.certificateNo && (
+                    <span className="input-group-text">
+                      {formData.certificateNo.length}/20
+                    </span>
+                  )}
+                </div>
+                <div className="text-red text-center">{charMsg}</div>
               </div>
-              <div className="text-red text-center">{charMsg}</div>
-              </div>
-              
-              
             </div>
             {/* Name */}
             <div className=" row mb-4 ">
@@ -441,8 +462,8 @@ useEffect(() => {
                 )}
               </div>
             </div>
-             {/* Date Of Birth */}
-             <div className="row mb-4">
+            {/* Date Of Birth */}
+            <div className="row mb-4">
               <label className="col-md-3 form-label">Date Of Birth:</label>
               <div className="col-md-9 input-group">
                 <input
@@ -561,7 +582,7 @@ useEffect(() => {
                 </div>
               </div>
             </div>
-           
+
             {/*  Address */}
             <div className=" row mb-4 ">
               <label className="col-md-3 form-label">
@@ -588,56 +609,63 @@ useEffect(() => {
                 )}
               </div>
             </div>
-            {mode===2 &&<div className="row mb-4">
-              <label className="form-label col-md-3">
-                Attach Document<span className="text-red">*</span>
-              </label>
-              <div className="col-md-9">
-                {(doc[0]?.imageName==="default.png"||doc?.length === 0) &&
-                  <div className="file-upload">
-                    <div className="input-name">Choose File</div>
-                   { <input
-                      type="file"
-                      required={mode === 1}
-                      className="form-control"
-                      id="formFile"
-                      onChange={(e)=>{uploadFiles(e, formData.certId)}}
-                      name="File"
-                      //required={!doc.length}
-                      // multiple
-                      // accept=".pdf"
-                      disabled={mode === 3 || mode === 4}
-                    />}
-                  </div>
-                }
-                {doc.map((file, i) => (
-                <div className="file-div">
-                  {(file.imageName!=="default.png") && <Smalltag
-                   
-                    fontAwsmIcon={"fa-file"}
-                    lable="File"
-                    key={i}
-                  />}
-                  {mode === 2 && ((file.imageName!=="default.png") &&
-                    <>
-                      <Delete
-                        onClick={(e) => delete_file(e, i)}
-                        className="cross-icon"
-                      />
-                    </>
+            {mode === 2 && (
+              <div className="row mb-4">
+                <label className="form-label col-md-3">
+                  Attach Document<span className="text-red">*</span>
+                </label>
+                <div className="col-md-9">
+                  {(doc[0]?.imageName === "default.png" ||
+                    doc?.length === 0) && (
+                    <div className="file-upload">
+                      <div className="input-name">Choose File</div>
+                      {
+                        <input
+                          type="file"
+                          required={mode === 1}
+                          className="form-control"
+                          id="formFile"
+                          onChange={(e) => {
+                            uploadFiles(e, formData.certId);
+                          }}
+                          name="File"
+                          //required={!doc.length}
+                          // multiple
+                          // accept=".pdf"
+                          disabled={mode === 3 || mode === 4}
+                        />
+                      }
+                    </div>
+                  )}
+                  {doc.map((file, i) => (
+                    <div className="file-div">
+                      {file.imageName !== "default.png" && (
+                        <Smalltag
+                          fontAwsmIcon={"fa-file"}
+                          lable="File"
+                          key={i}
+                        />
+                      )}
+                      {mode === 2 && file.imageName !== "default.png" && (
+                        <>
+                          <Delete
+                            onClick={(e) => delete_file(e, i)}
+                            className="cross-icon"
+                          />
+                        </>
+                      )}
+                    </div>
+                  ))}
+                  {fileErr_msg ? (
+                    <div className="text-red">{fileErr_msg}</div>
+                  ) : (
+                    ""
                   )}
                 </div>
-              ))}
-              {fileErr_msg? <div className="text-red">{fileErr_msg}</div>:""}
               </div>
-
-              
-            </div>}
+            )}
             {mode !== 4 && (
-              <button
-                type="submit"
-                className="btn btn-primary"
-              >
+              <button type="submit" className="btn btn-primary">
                 {buttonTitle}
               </button>
             )}
@@ -654,20 +682,25 @@ useEffect(() => {
           </form>
         </div>
 
-        
         <ConfirmDialog
-  title={dialogObj.title}
-  open={dialogObj.status} 
-  setOpen={(status)=> {setDialogObj({...dialogObj, status: status})}} 
-  onConfirm={dialogObj.onConfirm} 
-  // setConfirmStatus={setConfirmStatus}
-  // confirmStatus={confirmStatus}
-  dialogObj={dialogObj}
-  setDialogObj={setDialogObj}
-  type={dialogObj.type}
->
-  {(dialogObj.type==="alert"?<div className="text-center pb-4 fs-5">{dialogObj.msg}</div> : <div className=" pb-4 text-center fs-5">{dialogObj.msg}</div>)}
-</ConfirmDialog>
+          title={dialogObj.title}
+          open={dialogObj.status}
+          setOpen={(status) => {
+            setDialogObj({ ...dialogObj, status: status });
+          }}
+          onConfirm={dialogObj.onConfirm}
+          // setConfirmStatus={setConfirmStatus}
+          // confirmStatus={confirmStatus}
+          dialogObj={dialogObj}
+          setDialogObj={setDialogObj}
+          type={dialogObj.type}
+        >
+          {dialogObj.type === "alert" ? (
+            <div className="text-center pb-4 fs-5">{dialogObj.msg}</div>
+          ) : (
+            <div className=" pb-4 text-center fs-5">{dialogObj.msg}</div>
+          )}
+        </ConfirmDialog>
       </div>
     </div>
   );

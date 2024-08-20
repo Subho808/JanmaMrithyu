@@ -5,12 +5,12 @@ export default function Errorpage401() {
   return (
     <div className="error-bg">
       <div className="page">
-        <div className="dropdown float-end custom-layout">
+        {/* <div className="dropdown float-end custom-layout">
                 <div className="demo-icon nav-link icon mt-4 bg-primary" onClick={()=>custompagesswitcherdata.Swichermainright()}>
                     <i className="fe fe-settings fa-spin text_primary"></i>
                 </div>
-            </div>
-        <div className="page-content error-page error2" onClick={()=>custompagesswitcherdata.Swichermainrightremove()}>
+            </div> */}
+        <div className="page-content error-page error2" >
           <div className="container text-center">
             <div className="error-template">
               <h1 className="display-1 text-dark mb-2">
@@ -21,7 +21,7 @@ export default function Errorpage401() {
               </h5>
               <div className="text-center">
                 <Link
-                  to={`${process.env.PUBLIC_URL}/dashboard/`}
+                  to={`${process.env.PUBLIC_URL}/`}
                   className="btn btn-primary mt-5 mb-5"
                 >
                   

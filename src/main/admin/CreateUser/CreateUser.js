@@ -1,22 +1,9 @@
-import React, { useCallback, useMemo, useState } from "react";
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from "material-react-table";
-// import { generateCsv } from "export-to-csv";
+import React, { useMemo, useState } from "react";
+import { MaterialReactTable } from "material-react-table";
 import { ExportToCsv } from "export-to-csv";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import {
-  Tabs,
-  Tab,
-  OverlayTrigger,
-  Breadcrumb,
-  Card,
-  Row,
-  Col,
-  Form,
-} from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Breadcrumb } from "react-bootstrap";
+
 import {
   Box,
   Button,
@@ -25,25 +12,18 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  // MenuItem,
-  Stack,
-  TextField,
   Tooltip,
 } from "@mui/material";
 import { Delete, Edit, Visibility } from "@mui/icons-material";
 import { EditUser } from "./EditUser";
 import CloseIcon from "@mui/icons-material/Close";
-import { Alert } from "react-bootstrap";
-import { useEffect } from "react";
 import axios from "axios";
 import MsgAlert from "../../common/MsgAlert";
-import { getApiToken, getScplAdContext } from "../../common/common";
+import { getApiToken } from "../../common/common";
 const headers = { Authorization: "Bearer " + getApiToken() };
 
 const CreateUser = () => {
   console.log(headers);
-  const [openData, setOpenData] = useState([]);
-
   const [createModalOpen, setCreateModalOpen] = useState({
     open: false,
     mode: 0,
@@ -62,9 +42,8 @@ const CreateUser = () => {
   const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
     if (!Object.keys(validationErrors).length) {
       tableData[row.index] = values;
-      //send/receive api updates here, then refetch or update local table data for re-render
       setTableData([...tableData]);
-      exitEditingMode(); //required to exit editing mode and close modal
+      exitEditingMode();
     }
   };
 
@@ -149,9 +128,10 @@ const CreateUser = () => {
 
     return await axios
       .get(
-      process.env.REACT_APP_API_URL_PREFIX + `/api/v1/users/?emailId=${queryInputObj.email}`,
-      { headers }
-    )
+        process.env.REACT_APP_API_URL_PREFIX +
+          `/api/v1/users/?emailId=${queryInputObj.email}`,
+        { headers }
+      )
       .then((res) => {
         if (res.data) {
           setTableData(res.data);
@@ -172,7 +152,7 @@ const CreateUser = () => {
 
   return (
     <>
-      <div openData={openData}>
+      <div>
         <div className="page-header">
           <div>
             <h1 className="page-title">Create User</h1>
@@ -185,12 +165,6 @@ const CreateUser = () => {
                 aria-current="page"
               ></Breadcrumb.Item>
             </Breadcrumb>
-            {/* <Breadcrumb className="breadcrumb">
-                          <Breadcrumb.Item>
-                          
-                          </Breadcrumb.Item>
-                          </Breadcrumb>
-          <i className="fa fa-star"></i> */}
           </div>
           <div className="ms-auto pageheader-btn">
             <a
@@ -222,9 +196,7 @@ const CreateUser = () => {
                   htmlFor="exampleFormControlSelect1"
                   className="col-sm-3 col-form-label"
                 >
-                  <b>
-                    User Email:
-                  </b>
+                  <b>User Email:</b>
                   {/* <span className="text-red">*</span> */}
                 </label>
                 <div className="col-sm-4 mb-2">
@@ -406,20 +378,12 @@ const CreateUser = () => {
           }
           render={render}
           setRender={setRender}
-          onSubmit={handleCreateNewRow}
           mode={createModalOpen.mode}
-          rowId={createModalOpen.rowId}
           data={tableData}
           setData={setTableData}
           rowData={createModalOpen.rowData}
           queryInputObj={queryInputObj}
           maxWidth="1200px"
-          parMsg={msg}
-          setParMsg={setMsg}
-          parMsgTyp={msgTyp}
-          setParMsgTyp={setMsgTyp}
-          parErrExp={errExp}
-          set_parErrExp={set_errExp}
         />
       </div>
     </>
@@ -427,25 +391,18 @@ const CreateUser = () => {
 };
 
 export default CreateUser;
-//example of creating a mui dialog modal for creating new rows
 export const CreateModal = ({
   open,
-  columns,
+
   onClose,
-  onSubmit,
+
   mode,
-  rowId,
+
   setData,
   data,
   rowData,
-  index,
+
   queryInputObj,
-  parMsg,
-  setParMsg,
-  parMsgTyp,
-  setParMsgTyp,
-  parErrExp,
-  set_parErrExp,
 }) => {
   const [msg, setMsg] = useState("");
   const [msgTyp, setMsgTyp] = useState("");
@@ -453,8 +410,6 @@ export const CreateModal = ({
     status: true,
     content: "",
   });
-  const [addVal, setAddVal] = useState([]);
-  const [edtVal, setEdtVal] = useState([]);
 
   const handleClose = () => {
     onClose();
@@ -480,49 +435,22 @@ export const CreateModal = ({
           </IconButton>
         ) : null}
       </DialogTitle>
-      {/* <DialogTitle textAlign="center">Add New</DialogTitle> */}
       <DialogContent className="pb-0">
-        {/* {msg&&<span>{msg}</span>} */}
         <EditUser
           mode={mode}
           setData={setData}
           data={data}
           rowData={rowData}
-          index={index}
           queryInputObj={queryInputObj}
           msg={msg}
           setMsg={setMsg}
           msgTyp={msgTyp}
           setMsgTyp={setMsgTyp}
-          addVal={addVal}
-          setEdtVal={setEdtVal}
-          edtVal={edtVal}
-          parMsg={parMsg}
-          setParMsg={setParMsg}
-          parMsgTyp={parMsgTyp}
-          setParMsgTyp={setParMsgTyp}
           errExp={errExp}
           set_errExp={set_errExp}
-          parErrExp={parErrExp}
-          set_parErrExp={set_parErrExp}
         />
       </DialogContent>
-      <DialogActions sx={{ p: "1.25rem" }}>
-        {/* <Button onClick={onClose}>Cancel</Button> */}
-        {/* <Button color="secondary" onClick={handleSubmit} variant="contained">
-      Add New
-    </Button> */}
-      </DialogActions>
+      <DialogActions sx={{ p: "1.25rem" }}></DialogActions>
     </Dialog>
   );
 };
-
-// const validateRequired = (value) => !!value.length;
-// const validateEmail = (email) =>
-//     !!email.length &&
-//     email
-//         .toLowerCase()
-//         .match(
-//             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-//         );
-// const validateAge = (age) => age >= 18 && age <= 50;

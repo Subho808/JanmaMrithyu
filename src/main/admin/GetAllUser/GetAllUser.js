@@ -1,61 +1,19 @@
-import React, { useCallback, useMemo, useState } from "react";
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from "material-react-table";
-import { ExportToCsv } from 'export-to-csv';
+import React, { useMemo, useState } from "react";
+import { MaterialReactTable } from "material-react-table";
+import { ExportToCsv } from "export-to-csv";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import {
-  Tabs,
-  Tab,
-  OverlayTrigger,
-  Breadcrumb,
-  Card,
-  Row,
-  Col,
-  Form,
-} from "react-bootstrap";
-import { Link } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  // MenuItem,
-  Stack,
-  TextField,
-  Tooltip,
-} from "@mui/material";
-import { Delete, Edit, Visibility } from "@mui/icons-material";
-
-import CloseIcon from "@mui/icons-material/Close";
-import { Alert } from "react-bootstrap";
+import { Breadcrumb } from "react-bootstrap";
+import { Box, Button } from "@mui/material";
 import { useEffect } from "react";
 import axios from "axios";
 import MsgAlert from "../../common/MsgAlert";
-import { getApiToken, getScplAdContext } from "../../common/common";
+import { getApiToken } from "../../common/common";
 const headers = { Authorization: "Bearer " + getApiToken() };
 
 const GetAllUser = () => {
   console.log(headers);
-
-  const [createModalOpen, setCreateModalOpen] = useState({
-    open: false,
-    mode: 0,
-    rowId: -1,
-    row: null,
-    rowData: null,
-  });
   const [tableData, setTableData] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
-  const [render, setRender] = useState(0);
-  const handleCreateNewRow = (values) => {
-    tableData.push(values);
-    setTableData([...tableData]);
-  };
 
   const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
     if (!Object.keys(validationErrors).length) {
@@ -118,35 +76,9 @@ const GetAllUser = () => {
   const handleExportData = () => {
     csvExporter.generateCsv(tableData);
   };
-
-  const resetForm = () => {
-    setTableData([]);
-    setQueryInputObj({
-      apiId: "SUA00086",
-      criteria: {
-        modGrpNm: "",
-      },
-    });
-    setMsg("");
-    setMsgTyp("");
-  };
   const [msg, setMsg] = useState("");
   const [msgTyp, setMsgTyp] = useState("");
-  const [queryInputObj, setQueryInputObj] = useState({
-    apiId: "SUA00086",
-    criteria: {
-      modGrpNm: "",
-    },
-  });
-  const handleQueryInputChange = (event) => {
-    setQueryInputObj({
-      apiId: "SUA00086",
-      criteria: {
-        ...queryInputObj.criteria,
-        [event.target.name]: event.target.value,
-      },
-    });
-  };
+
   const [errExp, set_errExp] = useState({
     status: true,
     content: "",
@@ -155,61 +87,28 @@ const GetAllUser = () => {
   useEffect(() => {
     const postQuery = async (e) => {
       await axios
-        .get(
-          process.env.REACT_APP_API_URL_PREFIX + "/api/v1/users/",
-          { headers }
-        )
+        .get(process.env.REACT_APP_API_URL_PREFIX + "/api/v1/users/", {
+          headers,
+        })
         .then((res) => {
           if (res.data?.length) {
             setTableData(res.data);
             setMsg("Records Found");
-          setMsgTyp("AI");
+            setMsgTyp("AI");
           } else {
             setTableData([]);
             setMsg("No Records Found");
             setMsgTyp("AI");
           }
-
         })
         .catch((error) => {
           console.log(error);
           setMsg(error.response.data.message);
-        setMsgTyp("AE");
+          setMsgTyp("AE");
         });
     };
     postQuery();
   }, []);
-
-  const handle_savePath = async () => {
-    let path = window.location.pathname;
-    path = path.slice(1, path.length);
-    const currentPath = JSON.parse(sessionStorage.getItem("currentPath"));
-    const currentModule = sessionStorage.getItem("modId");
-    const userId = getScplAdContext().userId;
-    console.log(currentPath);
-    const body = {
-      apiId: "SUA00566",
-      mst: {
-        favNm: currentPath?.title,
-        favUrl: currentPath?.path,
-        menuId: currentPath?.menuId,
-        modId: currentModule,
-        ordBy: 0,
-        userCd: userId,
-      },
-    };
-
-    await axios
-      .post(process.env.REACT_APP_API_URL_PREFIX + "/SUF00138/saveAdd", body, {
-        headers,
-      })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   return (
     <>
@@ -227,36 +126,6 @@ const GetAllUser = () => {
               ></Breadcrumb.Item>
             </Breadcrumb>
           </div>
-          {/* <div className="ms-auto pageheader-btn">
-                        <a
-                            className="btn btn-primary btn-icon text-white"
-                            onClick={() => setCreateModalOpen({
-                                open: true,
-                                mode: 1,
-                                rowData: null
-                            })}
-
-                            variant="contained"
-                        >
-                            <span>
-                                <i className="fe fe-plus" />
-                                &nbsp;
-                            </span>
-                            Add New
-                        </a>
-                        &nbsp;
-                        <Link
-                            className="btn btn-success btn-icon text-white"
-                            to={`${process.env.PUBLIC_URL}/SUF00001_03`}
-                        >
-                            <span>
-                                <i className="fe fe-log-in" />
-                                &nbsp;
-                            </span>
-                            Add Multiple
-                        </Link>
-
-                    </div> */}
         </div>
         {msg && <MsgAlert errExp={errExp} msg={msg} msgTyp={msgTyp} />}
 
@@ -272,8 +141,6 @@ const GetAllUser = () => {
                   size: 120,
                 },
               }}
-              //enableStickyHeader
-              //muiTableContainerProps={{ sx: { maxHeight: '800px' } }}
               columns={columns}
               data={tableData}
               editingMode="modal" //default
@@ -283,57 +150,6 @@ const GetAllUser = () => {
               positionToolbarAlertBanner="bottom"
               onEditingRowSave={handleSaveRowEdits}
               onEditingRowCancel={handleCancelRowEdits}
-              renderRowActions={({ row, table }) => (
-                <Box sx={{ display: "flex", gap: "1rem" }}>
-                  <Tooltip arrow placement="left" title="Edit">
-                    <IconButton
-                      color="success"
-                      onClick={() =>
-                        setCreateModalOpen({
-                          open: true,
-                          mode: 2,
-                          rowData: tableData[row.index],
-                          index: row.index,
-                          queryInputObj,
-                          //rowData:[1,2,3]
-                        })
-                      }
-                    >
-                      <Edit />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip arrow placement="right" title="View">
-                    <IconButton
-                      color="warning"
-                      onClick={() =>
-                        setCreateModalOpen({
-                          open: true,
-                          mode: 4,
-                          rowData: tableData[row.index],
-                          index: row.index,
-                        })
-                      }
-                    >
-                      <Visibility />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip arrow placement="right" title="Delete">
-                    <IconButton
-                      color="error"
-                      onClick={() =>
-                        setCreateModalOpen({
-                          open: true,
-                          mode: 3,
-                          rowData: tableData[row.index],
-                          queryInputObj,
-                        })
-                      }
-                    >
-                      <Delete />
-                    </IconButton>
-                  </Tooltip>
-                </Box>
-              )}
               renderTopToolbarCustomActions={({ table }) => (
                 <>
                   <Box
@@ -404,142 +220,3 @@ const GetAllUser = () => {
 };
 
 export default GetAllUser;
-//example of creating a mui dialog modal for creating new rows
-// export const CreateModal = ({ open, columns, onClose, onSubmit, mode, rowId, setData, data, rowData, index, queryInputObj, parMsg, setParMsg, parMsgTyp, setParMsgTyp ,parErrExp, set_parErrExp }) => {
-
-//     const [msg, setMsg] = useState("")
-//     const [msgTyp, setMsgTyp] = useState("")
-//     const [errExp, set_errExp] = useState({
-//         status: true,
-//         content: ""
-//     })
-//     const [addVal, setAddVal] = useState([])
-//     const [edtVal, setEdtVal] = useState([])
-//     const call_pageOpen_api = async (url, body, headers) => {
-//         await axios.post(url, body, { headers }).then(res => {
-//             setEdtVal(res.data.content.mst)
-//             setMsg(res?.data?.appMsgList?.list[0]?.errDesc)
-//             setMsgTyp(res?.data?.appMsgList?.list[0]?.errType)
-//             set_errExp({status:res.data?.appMsgList?.errorStatus})
-
-//         }).catch(error => {
-//             console.log(error);
-//         })
-//     }
-
-//     const call_formOpen_api = async (url, headers) => {
-//         let obj = {
-//             apiId: "SUA00088"
-//         }
-//         await axios.post(url, obj, { headers }).then(res => {
-//             setAddVal(res.data.content.mst)
-//             setMsg(res?.data?.appMsgList?.list[0]?.errDesc)
-//             setMsgTyp(res?.data?.appMsgList?.list[0]?.errType)
-//             set_errExp({status:res.data?.appMsgList?.errorStatus})
-
-//         }).catch(error => {
-//             console.log(error);
-//         })
-//     }
-
-//     // useEffect(()=>{
-//     //     let url= "";
-//     //     if (mode===1){
-//     //         url = process.env.REACT_APP_API_URL_PREFIX +"/su/SUF00001/openAddForm";
-//     //     }
-//     //     open && call_formOpen_api(url, headers)
-//     // }, [mode])
-
-//     useEffect(() => {
-//         let url = "";
-//         let body = {}
-
-//         if (mode === 1) {
-//             url = process.env.REACT_APP_API_URL_PREFIX + "/SUF00001/openAddForm";
-//         }
-//         if (mode === 2) {
-//             url = process.env.REACT_APP_API_URL_PREFIX + "/SUF00001/openEditForm";
-//             body = {
-//                 apiId: "SUA00093",
-//                 mst: {
-//                     modGrpId: rowData.modGrpId
-//                 }
-//             }
-//         }
-//         if (mode === 3) {
-//             url = process.env.REACT_APP_API_URL_PREFIX + "/SUF00001/openDeleteForm";
-//             body = {
-//                 apiId: "SUA00097",
-//                 mst: {
-//                     modGrpId: rowData.modGrpId
-//                 }
-//             }
-//         }
-//         if (mode === 4) {
-//             url = process.env.REACT_APP_API_URL_PREFIX + "/SUF00001/openViewForm";
-//             body = {
-//                 apiId: "SUA00092",
-//                 mst: {
-//                     modGrpId: rowData.modGrpId
-//                 }
-//             }
-
-//         }
-
-//         { (mode === 1) && open && call_formOpen_api(url, headers) }
-//         { (mode !== 1) && open && call_pageOpen_api(url, body, headers) }
-//     }, [mode])
-
-//     const handleClose = () => {
-//         onClose();
-//     }
-
-//     return (
-
-//         <Dialog open={open} setData={setData} data={data} fullWidth
-//             maxWidth="md" >
-//             <DialogTitle sx={{ m: 1, p: 2 }} >
-
-//                 {onClose ? (
-//                     <IconButton
-//                         aria-label="close"
-//                         onClick={handleClose}
-//                         sx={{
-//                             position: 'absolute',
-//                             right: 8,
-//                             top: 8,
-//                             color: (theme) => theme.palette.grey[500],
-//                         }}
-//                     >
-//                         <CloseIcon style={{ color: "black" }} />
-//                     </IconButton>
-//                 ) : null}
-//             </DialogTitle>
-//             {/* <DialogTitle textAlign="center">Add New</DialogTitle> */}
-//             <DialogContent className="pb-0" >
-//                 {/* {msg&&<span>{msg}</span>} */}
-//                 <ModuleGroupForm mode={mode} setData={setData} data={data} rowData={rowData} index={index} queryInputObj={queryInputObj}
-//                     msg={msg} setMsg={setMsg} msgTyp={msgTyp} setMsgTyp={setMsgTyp} addVal={addVal} setEdtVal={setEdtVal} edtVal={edtVal} parMsg={parMsg}
-//                 setParMsg={setParMsg} parMsgTyp={parMsgTyp} setParMsgTyp={setParMsgTyp} errExp={errExp} set_errExp={set_errExp}
-//                 parErrExp={parErrExp} set_parErrExp={set_parErrExp} />
-//             </DialogContent>
-//             <DialogActions sx={{ p: "1.25rem" }}>
-//                 {/* <Button onClick={onClose}>Cancel</Button> */}
-//                 {/* <Button color="secondary" onClick={handleSubmit} variant="contained">
-//       Add New
-//     </Button> */}
-//             </DialogActions>
-//         </Dialog>
-
-//     );
-// };
-
-// const validateRequired = (value) => !!value.length;
-// const validateEmail = (email) =>
-//     !!email.length &&
-//     email
-//         .toLowerCase()
-//         .match(
-//             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-//         );
-// const validateAge = (age) => age >= 18 && age <= 50;

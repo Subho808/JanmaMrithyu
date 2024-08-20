@@ -18,6 +18,7 @@ import MsgAlert from "./MsgAlert";
 import Countdown from "react-countdown";
 import Captcha from "./Capcha";
 import { Helmet } from "react-helmet";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 // import { loadCaptchaEnginge, LoadCanvasTemplate, LoadCanvasTemplateNoReload, validateCaptcha } from 'react-simple-captcha';
 //import {isAutenticated} from "./common"
@@ -33,13 +34,7 @@ export default function Login() {
     password: "",
   });
 
-  // useEffect(() => {
-  //   fetch("https://api.ipify.org?format=json")
-  //     .then((response) => response.json())
-  //     .then((data) => setFormData({ ...formData, ipAddress: data.ip }))
-  //     .catch((error) => console.log(error));
-  // }, []);
-
+  const [visblePass, setvisblePass] = useState(false);
   const [loginMsg, setLoginMsg] = useState("");
   const [errorMsg, set_errorMsg] = useState({ VldtMsg: "", capchaMsg: "" });
   const [captcha, setCaptcha] = useState();
@@ -109,36 +104,8 @@ export default function Login() {
   };
   console.log(loginMsg);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   let obj = {
-  //     username: formData.username,
-  //     password: formData.password,
-  //   };
-  //   // const { emailId, mobNo, ipAddress, optnChngLogNo, emailOtp, mobileOtp, emailOtpLogNo, mobOtpLogNo, validateMobOtp, validateEmailOtp, ...obj } = formData
-  //   let url = process.env.REACT_APP_API_URL_PREFIX + "/auth/login";
-  //   await axios
-  //     .post(url, obj /* , {headers} */)
-  //     .then((response) => {
-
-  //       if (response) {
-  //         //setData([...data, formData])
-  //         navigate(process.env.PUBLIC_URL + "/SUF00112_01");
-
-  //         setScplAdContext(response.data);
-  //         setApiToken(response.data.token);
-  //         // setLocationTree(response.data.content.detailData.listLocation);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
-
-  const handleCaptchaSuccess = () => {
-    console.log("Captcha validation successful");
-    // Additional actions on captcha success
+  const handlePassVisble = () => {
+    setvisblePass(!visblePass); // Additional actions on captcha success
   };
 
   return (
@@ -181,7 +148,7 @@ export default function Login() {
           </div>
           <div className="container-login100">
             <div className="wrap-login100 p-0">
-              <Card.Body>
+              <Card.Body style={{width:"392px"}}>
                 <span className="login100-form-title">User Login</span>
                 <form onSubmit={handleSubmit}>
                   {/* <div className="tab-pane active show" id="tab20"> */}
@@ -205,12 +172,12 @@ export default function Login() {
                       <i className="zmdi zmdi-account" aria-hidden="true"></i>
                     </span>
                   </div>
-                  <div className="wrap-input100 validate-input">
+                  <div className="wrap-input100 validate-input input-group">
                     <input
                       required
                       className="input100 form-control"
                       // style={errorMsgUserId?{borderColor:"red"}:{borderColor:" #ecf0fa"}}
-                      type="text"
+                      type={visblePass ? "text" : "password"}
                       name="password"
                       id="userPassword"
                       placeholder="Enter Password"
@@ -224,6 +191,13 @@ export default function Login() {
                     <span className="focus-input100"></span>
                     <span className="symbol-input100">
                       <i className="zmdi zmdi-lock" aria-hidden="true"></i>
+                    </span>
+                    <span className="input-group-text"
+                    onClick={handlePassVisble}
+                    >
+                      <FontAwesomeIcon
+                        icon={visblePass ? faEye : faEyeSlash}
+                      />
                     </span>
                   </div>
                   <Captcha

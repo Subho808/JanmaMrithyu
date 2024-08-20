@@ -2,42 +2,22 @@ import React, { useState, useRef } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { getApiToken } from "../../common/common";
-import { Alert } from "react-bootstrap";
-import { log } from "nvd3";
-import { Button } from "react-bootstrap";
 import Swal from "sweetalert2";
-import * as sweetalerts from "../../../data/Component/sweetalerts/sweetalerts";
 import ConfirmDialog from "../../common/ConfirmDialog";
 import MsgAlert from "../../common/MsgAlert";
 
 export const EditUser = ({
-  editMode,
-  post,
-  dispatch,
   mode,
-  rowId,
   setData,
   data,
   onClose,
-  row,
   rowData,
-  index,
   queryInputObj,
   msg,
   setMsg,
   msgTyp,
   setMsgTyp,
-  addVal,
-  setEdtVal,
-  edtVal,
-  parMsg,
-  setParMsg,
-  parMsgTyp,
-  setParMsgTyp,
   errExp,
-  set_errExp,
-  parErrExp,
-  set_parErrExp,
 }) => {
   const fetchData = async () => {
     await axios
@@ -53,13 +33,6 @@ export const EditUser = ({
       });
   };
   const headers = { Authorization: "Bearer " + getApiToken() };
-  console.log(mode);
-  console.log(rowData);
-  console.log(rowId);
-  console.log(addVal);
-
-  // const [msg, setMsg] = useState("")
-  // const [msgTyp, setMsgTyp] = useState("")
 
   const [formData, setFormData] = useState({
     id: rowData ? rowData.id : "",
@@ -79,73 +52,43 @@ export const EditUser = ({
         ],
   });
 
-  console.log(formData);
-
-  // useEffect(() => {
-  //   if (mode === 1) {
-  //     setEdtVal({
-  //       modGrpId: "",
-  //       modGrpNm: "",
-  //       actFlg: "A",
-  //     });
-  //   }
-  // }, [mode]);
-
   const handleInputChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
     setCharCount({ ...charCount, [event.target.name]: true });
   };
 
-  const handleStatusChange = (event) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-    setEdtVal({ ...edtVal, [event.target.name]: event.target.value });
-  };
-
-  const validateInput = (formData) => {
-    if (!formData.name.trim() || formData.dev_nm.trim() === "") {
-      return false;
-    }
-    if (!formData.addr.trim() || formData.addr.trim() === "") {
-      return false;
-    }
-
-    // other validations
-
-    return true;
-  };
   const resetForm = () => {
-    setMsg("")
-    setMsgTyp("")
+    setMsg("");
+    setMsgTyp("");
     setFormData({
-      id:  "",
+      id: "",
       name: "",
       email: "",
       password: "",
       about: "",
       roles: [
-            {
-              id: 0,
-              name: "string",
-            },
-          ],
+        {
+          id: 0,
+          name: "string",
+        },
+      ],
     });
   };
   const resetForm1 = () => {
     setFormData({
-      id:  "",
+      id: "",
       name: "",
       email: "",
       password: "",
       about: "",
       roles: [
-            {
-              id: 0,
-              name: "string",
-            },
-          ],
+        {
+          id: 0,
+          name: "string",
+        },
+      ],
     });
   };
-
 
   const [charCount, setCharCount] = useState({
     modGrpNm: false,
@@ -158,15 +101,9 @@ export const EditUser = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { id,roles, ...obj } = formData;
+    const { id, roles, ...obj } = formData;
     const addObj = {
       ...obj,
-      // roles: obj.roles.map((item) => {
-      //   return {
-      //     ...item,
-      //     id: parseInt(item.id),
-      //   };
-      // }),
     };
 
     const editObj = {
@@ -179,7 +116,6 @@ export const EditUser = ({
         };
       }),
     };
-
 
     if (mode === 1)
       await axios
@@ -194,7 +130,6 @@ export const EditUser = ({
             setMsgTyp("AI");
             resetForm1();
           }
-
         })
         .catch((error) => {
           console.log("error");
@@ -222,40 +157,8 @@ export const EditUser = ({
 
     if (mode === 3) {
       set_open(true);
-      // Show confirmation dialog
-      // Swal.fire({
-      //     title: "Are you sure?",
-      //     // text: "You won't be able to revert this!",
-      //     icon: "warning",
-      //     showCancelButton: true,
-      //     confirmButtonColor: "#3085d6",
-      //     cancelButtonColor: "#d33",
-      //     confirmButtonText: "Yes, delete it!",
-      //     backdrop: true,
-      // }).then((result) => {
-      // if (result.isConfirmed) {
-      // If user confirms, make the delete API call
-      // if (window.confirm("Are you sure? The record will be deleted parmanantly")) {
-      //   axios
-      //     .post(process.env.REACT_APP_API_URL_PREFIX + '/SUF00001/saveDelete', deleteObj, { headers })
-      //     .then((res) => {
-      //       console.log(res.data);
-      //       if (!res?.data?.appMsgList?.errorStatus) {
-      //         fetchData();
-      //       }
-      //       setMsg(res?.data?.appMsgList?.list[0]?.errDesc + " (" + res?.data?.appMsgList?.list[0]?.errCd + ")");
-      //       setMsgTyp(res?.data?.appMsgList?.list[0]?.errType);
-      //       set_parErrExp({ status: res.data?.appMsgList?.errorStatus })
-      //     })
-      //     .catch((error) => {
-      //       console.log("error");
-      //     });
-      // }
-      // });
     }
   };
-
-  const pageTitle = editMode ? "Edit Post" : "Create Post";
 
   const getFormTitle = (mode) => {
     switch (mode) {
@@ -302,10 +205,9 @@ export const EditUser = ({
   const [confirmStatus, setConfirmStatus] = useState(false);
   const [delStatus, set_delStatus] = useState(false);
   const handleConfirmation = async () => {
-
-    axios.delete(
-        process.env.REACT_APP_API_URL_PREFIX +
-          `/api/v1/users/${formData.id}`,
+    axios
+      .delete(
+        process.env.REACT_APP_API_URL_PREFIX + `/api/v1/users/${formData.id}`,
         { headers }
       )
       .then((res) => {
@@ -321,7 +223,6 @@ export const EditUser = ({
         console.log("error");
         setMsg(error.response.data.message);
         setMsgTyp("AE");
-
       });
   };
 
@@ -347,18 +248,20 @@ export const EditUser = ({
           className="form-horizontal"
           onSubmit={(e) => handleSubmit(e, mode, data, setData, onClose)}
         >
-          {mode!==1 && <div className=" row mb-4">
-            <label className="col-md-3 form-label">Id</label>
-            <div className="col-md-9">
-              <input
-                className="form-control border "
-                type="text"
-                name="id"
-                value={formData.id}
-                readOnly
-              />
+          {mode !== 1 && (
+            <div className=" row mb-4">
+              <label className="col-md-3 form-label">Id</label>
+              <div className="col-md-9">
+                <input
+                  className="form-control border "
+                  type="text"
+                  name="id"
+                  value={formData.id}
+                  readOnly
+                />
+              </div>
             </div>
-          </div>}
+          )}
           <div className=" row mb-4">
             <label className="col-md-3 form-label">
               Name <span className="text-red">*</span>

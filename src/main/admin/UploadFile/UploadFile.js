@@ -257,7 +257,7 @@ const UploadFiles = () => {
       {
         accessorKey: "address",
         header: "Address",
-        size: 140,
+        size: 240,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
         }),
@@ -347,7 +347,8 @@ const UploadFiles = () => {
         </div>
         {msg && <MsgAlert errExp={errExp} msg={msg} msgTyp={msgTyp} />}
         <div className="card">
-          <form id="myForm" onSubmit={postQuery}>
+        <div className="container-fluid mb-5">
+        <form onSubmit={postQuery}>
             <div className="row mb-4 ms-4 mt-4">
               <label
                 for="exampleFormControlSelect1"
@@ -381,134 +382,139 @@ const UploadFiles = () => {
             </div>
           </form>
           <MaterialReactTable
-            displayColumnDefOptions={{
-              "mrt-row-actions": {
-                muiTableHeadCellProps: {
-                  align: "center",
+              autoResetPageIndex={false}
+              displayColumnDefOptions={{
+                "mrt-row-actions": {
+                  muiTableHeadCellProps: {
+                    align: "center",
+                  },
+                  size: 120,
                 },
-                size: 120,
-              },
-            }}
-            columns={columns}
-            data={tableData}
-            editingMode="modal" //default
-            enableRowSelection
-            enableColumnOrdering
-            enableEditing
-            positionToolbarAlertBanner="bottom"
-            onEditingRowSave={handleSaveRowEdits}
-            onEditingRowCancel={handleCancelRowEdits}
-            renderRowActions={({ row, table }) => (
-              <Box sx={{ display: "flex", gap: "1rem" }}>
-                <Tooltip arrow placement="left" title="Edit">
-                  <IconButton
-                    color="success"
-                    onClick={() =>
-                      setCreateModalOpen({
-                        open: true,
-                        mode: 2,
-                        rowData: tableData[row.index],
-                        index: row.index,
-                        //rowData:[1,2,3]
-                      })
-                    }
-                  >
-                    <Edit />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip arrow placement="right" title="Delete">
-                  <IconButton
-                    color="warning"
-                    onClick={() =>
-                      setCreateModalOpen({
-                        open: true,
-                        mode: 4,
-                        rowData: tableData[row.index],
-                        index: row.index,
-                      })
-                    }
-                  >
-                    <Visibility />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip arrow placement="right" title="View">
-                  <IconButton
-                    color="error"
-                    onClick={() =>
-                      setCreateModalOpen({
-                        open: true,
-                        mode: 3,
-                        rowData: tableData[row.index],
-                      })
-                    }
-                  >
-                    <Delete />
-                  </IconButton>
-                </Tooltip>
-              </Box>
-            )}
-            renderTopToolbarCustomActions={({ table }) => (
-              <>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: "1rem",
-                    p: "0.5rem",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  <Button
-                    className="btn btn-primary fs-10"
-                    //export all data that is currently in the table (ignore pagination, sorting, filtering, etc.)
-                    onClick={handleExportData}
-                    startIcon={<FileDownloadIcon />}
-                    variant="contained"
-                  >
-                    Export All Data
-                  </Button>
-                  <Button
-                    className="btn btn-primary fs-10"
-                    disabled={
-                      table.getPrePaginationRowModel().rows.length === 0
-                    }
-                    //export all rows, including from the next page, (still respects filtering and sorting)
-                    onClick={() =>
-                      handleExportRows(table.getPrePaginationRowModel().rows)
-                    }
-                    startIcon={<FileDownloadIcon />}
-                    variant="contained"
-                  >
-                    Export All Rows
-                  </Button>
-                  <Button
-                    className="btn btn-primary fs-10"
-                    disabled={table.getRowModel().rows.length === 0}
-                    //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
-                    onClick={() => handleExportRows(table.getRowModel().rows)}
-                    startIcon={<FileDownloadIcon />}
-                    variant="contained"
-                  >
-                    Export Page Rows
-                  </Button>
-                  <Button
-                    className="btn btn-primary fs-10"
-                    disabled={
-                      !table.getIsSomeRowsSelected() &&
-                      !table.getIsAllRowsSelected()
-                    }
-                    //only export selected rows
-                    onClick={() =>
-                      handleExportRows(table.getSelectedRowModel().rows)
-                    }
-                    startIcon={<FileDownloadIcon />}
-                    variant="contained"
-                  >
-                    Export Selected Rows
-                  </Button>
+              }}
+              columns={columns}
+              data={tableData}
+              editingMode="modal"
+              enableRowSelection
+              enableColumnOrdering
+              enableEditing
+              positionToolbarAlertBanner="bottom"
+              onEditingRowSave={handleSaveRowEdits}
+              onEditingRowCancel={handleCancelRowEdits}
+              renderRowActions={({ row, table }) => (
+                <Box sx={{ display: "flex", gap: "1rem" }}>
+                  <Tooltip arrow placement="left" title="Edit">
+                    <IconButton
+                      color="success"
+                      onClick={() =>
+                        setCreateModalOpen({
+                          open: true,
+                          mode: 2,
+                          rowData: tableData[row.index],
+                          index: row.index,
+                          queryInputObj,
+                          //rowData:[1,2,3]
+                        })
+                      }
+                    >
+                      <Edit />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip arrow placement="right" title="View">
+                    <IconButton
+                      color="warning"
+                      onClick={() =>
+                        setCreateModalOpen({
+                          open: true,
+                          mode: 4,
+                          rowData: tableData[row.index],
+                          index: row.index,
+                        })
+                      }
+                    >
+                      <Visibility />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip arrow placement="right" title="Delete">
+                    <IconButton
+                      color="error"
+                      onClick={() =>
+                        setCreateModalOpen({
+                          open: true,
+                          mode: 3,
+                          rowData: tableData[row.index],
+                          queryInputObj,
+                        })
+                      }
+                    >
+                      <Delete />
+                    </IconButton>
+                  </Tooltip>
                 </Box>
-              </>
-            )}
-          />
+              )}
+              renderTopToolbarCustomActions={({ table }) => (
+                <>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: "1rem",
+                      p: "0.5rem",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <Button
+                      className="btn btn-primary fs-10"
+                      //export all data that is currently in the table (ignore pagination, sorting, filtering, etc.)
+                      onClick={handleExportData}
+                      startIcon={<FileDownloadIcon />}
+                      variant="contained"
+                    >
+                      Export All Data
+                    </Button>
+                    <Button
+                      className="btn btn-primary fs-10"
+                      disabled={
+                        table.getPrePaginationRowModel().rows.length === 0
+                      }
+                      //export all rows, including from the next page, (still respects filtering and sorting)
+                      onClick={() =>
+                        handleExportRows(table.getPrePaginationRowModel().rows)
+                      }
+                      startIcon={<FileDownloadIcon />}
+                      variant="contained"
+                    >
+                      Export All Rows
+                    </Button>
+                    <Button
+                      className="btn btn-primary fs-10"
+                      disabled={table.getRowModel().rows.length === 0}
+                      //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
+                      onClick={() => handleExportRows(table.getRowModel().rows)}
+                      startIcon={<FileDownloadIcon />}
+                      variant="contained"
+                    >
+                      Export Page Rows
+                    </Button>
+                    <Button
+                      className="btn btn-primary fs-10"
+                      disabled={
+                        !table.getIsSomeRowsSelected() &&
+                        !table.getIsAllRowsSelected()
+                      }
+                      //only export selected rows
+                      onClick={() =>
+                        handleExportRows(table.getSelectedRowModel().rows)
+                      }
+                      startIcon={<FileDownloadIcon />}
+                      variant="contained"
+                    >
+                      Export Selected Rows
+                    </Button>
+                  </Box>
+                </>
+              )}
+            />
+        </div>
+          
 
           {/* fileOpen Dialog */}
           <Dialog

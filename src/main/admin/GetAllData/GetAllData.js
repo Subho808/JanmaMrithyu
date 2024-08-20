@@ -1,33 +1,8 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { MaterialReactTable } from "material-react-table";
-import { ExportToCsv, generateCsv } from "export-to-csv";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import { Modal, ModalTitle } from "react-bootstrap";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Stack,
-  TextField,
-  Tooltip,
-} from "@mui/material";
-import { Delete, Edit, Visibility } from "@mui/icons-material";
-import FileOpenIcon from "@mui/icons-material/FileOpen";
-import { Alert } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faSearch } from "@fortawesome/free-solid-svg-icons";
-import CloseIcon from "@mui/icons-material/Close";
+import { ExportToCsv } from "export-to-csv";
 import axios from "axios";
 import { getApiToken } from "../../common/common";
-import Lov from "../../common/Lov _new";
-// import { modLovColumns } from "./columns";
 import MsgAlert from "../../common/MsgAlert";
-// import FavLink from "../../common/FavLink";
 const headers = { Authorization: "Bearer " + getApiToken() };
 let file = "";
 const GetAllRecords = () => {
@@ -61,45 +36,25 @@ const GetAllRecords = () => {
         if (res.data) {
           setTableData2(res.data);
           file = res.data.imageName;
+          setMsg("Records Found");
+          setMsgTyp("AI");
         } else {
           setTableData2({});
+          setMsg("No Records Found");
+          setMsgTyp("AI");
         }
-
-        setMsg(
-          res?.data?.appMsgList?.list[0]?.errDesc +
-            " (" +
-            res?.data?.appMsgList?.list[0]?.errCd +
-            ")"
-        );
-        setMsgTyp(res?.data?.appMsgList?.list[0]?.errType);
-        set_errExp({ status: res.data?.appMsgList?.errorStatus });
       })
       .catch((error) => {
         console.log(error);
+        setMsg(error);
+        setMsgTyp("AE");
       });
   };
 
   // Query end...............
 
   const [tableData2, setTableData2] = useState({});
-
-  const [createModalOpen, setCreateModalOpen] = useState({
-    open: false,
-    mode: 0,
-    rowId: -1,
-    row: null,
-    rowData: null,
-  });
-
   const [validationErrors, setValidationErrors] = useState({});
-
-  const [render, setRender] = useState(0);
-
-  const handleCreateNewRow = (values) => {
-    tableData2.push(values);
-    setTableData2(...tableData2);
-  };
-
   const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
     if (!Object.keys(validationErrors).length) {
       tableData2[row.index] = values;
@@ -143,18 +98,6 @@ const GetAllRecords = () => {
     },
     [validationErrors]
   );
-
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const closeDialog = () => {
-    setDialogOpen(false);
-  };
-  const [selectedFileUrl, setSelectedFileUrl] = useState(null);
-
-  const handleFileUrlClick = (fileUrl) => {
-    setSelectedFileUrl(fileUrl);
-    setDialogOpen(true); // Open the dialog when the link is clicked
-  };
-
   const columns = useMemo(
     () => [
       {
@@ -200,30 +143,6 @@ const GetAllRecords = () => {
     ],
     [getCommonEditTextFieldProps]
   );
-
-  //1st
-  const csvOptions = {
-    fieldSeparator: ",",
-    quoteStrings: '"',
-    decimalSeparator: ".",
-    showLabels: true,
-    useBom: true,
-    useKeysAsHeaders: false,
-    headers: columns.map((c) => c.header),
-  };
-
-  //csv files
-  const csvExporter = new ExportToCsv(csvOptions);
-
-  //functions
-  const handleExportRows = (rows) => {
-    csvExporter.generateCsv(rows.map((row) => row.original));
-  };
-
-  const handleExportData = () => {
-    csvExporter.generateCsv(tableData2);
-  };
-
   const download_file = async () => {
     await axios
       .get(
@@ -261,6 +180,8 @@ const GetAllRecords = () => {
     });
     setTableData2({});
     file = "";
+    setMsg("");
+    setMsgTyp("");
   };
 
   return (
@@ -283,14 +204,16 @@ const GetAllRecords = () => {
             </nav>
           </div>
         </div>
-
+        {msg && <MsgAlert errExp={errExp} msg={msg} msgTyp={msgTyp} />}
         <div className="card">
           <div className="container-fluid mb-5">
             <form id="myForm" className="py-4" onSubmit={postQuery}>
               <div className="row mb-4">
                 <div className="col-md-9 input-group mb-2">
                   <label className="col-md-3 form-label">
-                    <b>Certificate No:<span className="text-red">*</span></b>
+                    <b>
+                      Certificate No:<span className="text-red">*</span>
+                    </b>
                   </label>
                   <div className="col-md-9">
                     <input

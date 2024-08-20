@@ -21,6 +21,8 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import * as custompagesswitcherdata from "../../data/Switcher/Custompagesswitcherdata";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 let chngLogNo = "";
 export default function ForgotPass() {
   const navigate = useNavigate();
@@ -118,6 +120,15 @@ export default function ForgotPass() {
     }
   };
 
+  const [visblePass, setvisblePass] = useState({pass:false, confPass:false});
+  const handlePassVisble = () => {
+    setvisblePass({...visblePass, pass:!visblePass.pass}); // Additional actions on captcha success
+  };
+  const handleConfPassVisble = () => {
+    setvisblePass({...visblePass, confPass:!visblePass.confPass}); // Additional actions on captcha success
+  };
+
+
   return (
     <div className="login-img">
       <div className="page">
@@ -155,7 +166,7 @@ export default function ForgotPass() {
                     handleForgot(e);
                   }}
                 >
-                  <Card.Body>
+                  <Card.Body style={{width:"392px"}}>
                     <div className="text-center">
                       <span className="login100-form-title">
                         Reset Password
@@ -188,10 +199,10 @@ export default function ForgotPass() {
                       </div>
                       {formData.token && (
                         <>
-                          <div className="wrap-input100 validate-input">
+                          <div className="wrap-input100 validate-input input-group">
                             {/* <label className="form-label">E-Mail</label> */}
                             <input
-                              type="text"
+                               type={visblePass.pass ? "text" : "password"}
                               className="input100 form-control"
                               // password="true"
                               autoComplete="off"
@@ -208,11 +219,18 @@ export default function ForgotPass() {
                                 aria-hidden="true"
                               ></i>
                             </span>
+                            <span className="input-group-text"
+                    onClick={handlePassVisble}
+                    >
+                      <FontAwesomeIcon
+                        icon={visblePass.pass ? faEye : faEyeSlash}
+                      />
+                    </span>
                           </div>
-                          <div className="wrap-input100 validate-input">
+                          <div className="wrap-input100 validate-input input-group">
                             {/* <label className="form-label">E-Mail</label> */}
                             <input
-                              type="text"
+                               type={visblePass.confPass ? "text" : "password"}
                               className="input100 form-control"
                               // password="true"
                               autoComplete="off"
@@ -229,8 +247,13 @@ export default function ForgotPass() {
                                 aria-hidden="true"
                               ></i>
                             </span>
-                            {/* {changeBtn.vldtCheck ? (changeBtn.mobOtp ? <span className="symbol-input1000"><i className="zmdi zmdi-check" style={{ color: "green" }}></i></span> : <span className="symbol-input1000"><i className="zmdi zmdi-close" style={{ color: "red" }}></i></span>) : ""} */}
-                          </div>
+                            <span className="input-group-text"
+                    onClick={handleConfPassVisble}
+                    >
+                      <FontAwesomeIcon
+                        icon={visblePass.confPass ? faEye : faEyeSlash}
+                      />
+                    </span>                          </div>
                         </>
                       )}
                       {errorMsg.pass ? (
