@@ -18,6 +18,10 @@ export const EditUser = ({
   msgTyp,
   setMsgTyp,
   errExp,
+  parMsgTyp,
+  parMsg,
+  setParMsgTyp,
+  setParMsg
 }) => {
   const fetchData = async () => {
     await axios
@@ -27,9 +31,18 @@ export const EditUser = ({
         { headers }
       )
       .then((res) => {
-        console.log(res.data);
+        if (res.data){
+          console.log(res.data);
         setData(res?.data);
         console.log(data);
+        setParMsg("Records Found");
+          setParMsgTyp("AI");
+        }else{
+          setData([]);
+          setParMsg("No Records Found");
+          setParMsgTyp("AI");
+        }
+        
       });
   };
   const headers = { Authorization: "Bearer " + getApiToken() };

@@ -14,22 +14,19 @@ console.log(userId);
 
 const UploadFilesForm = ({
   editMode,
-  post,
-  dispatch,
   mode,
   rowId,
   setData,
   data,
   onClose,
-  row,
   rowData,
-  index,
   msg,
   setMsg,
   msgTyp,
   setMsgTyp,
   errExp,
-  queryInputObj,
+  setParMsgTyp,
+  setParMsg
 }) => {
   console.log(mode);
   console.log(rowData);
@@ -42,9 +39,18 @@ const UploadFilesForm = ({
         { headers }
       )
       .then((res) => {
-        console.log(res.data);
+        if (res.data){
+          console.log(res.data);
         setData(res?.data);
         console.log(data);
+        setParMsg("Records Found");
+          setParMsgTyp("AI");
+        }else{
+          setData([]);
+          setParMsg("No Records Found");
+          setParMsgTyp("AI");
+        }
+        
       });
   };
 
@@ -154,7 +160,7 @@ const UploadFilesForm = ({
       await axios
         .post(
           process.env.REACT_APP_API_URL_PREFIX +
-            `/api/v1/user/${formData.userId}/upldCertificate`,
+            `/api/v1/user/${userId}/upldCertificate`,
           addObj,
           {
             headers,
@@ -387,26 +393,6 @@ const UploadFilesForm = ({
                 </div>
               </div>
             )}
-            {/* User ID */}
-            {
-              <div className=" row mb-4">
-                <label className="col-md-3 form-label">
-                  User Id<span className="text-red">*</span>
-                </label>
-                <div className="col-md-9 input-group">
-                  <input
-                    className="form-control ui_displayd_txt_"
-                    type="text"
-                    placeholder="User Id"
-                    name="userId"
-                    value={formData.userId}
-                    onChange={handleInputChange}
-                    disabled={mode === 3 || mode === 4}
-                    
-                  />
-                </div>
-              </div>
-            }
             {/* certificate No */}
             <div className=" row mb-4">
               <label className="col-md-3 form-label">

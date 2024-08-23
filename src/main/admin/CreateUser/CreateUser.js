@@ -384,6 +384,10 @@ const CreateUser = () => {
           rowData={createModalOpen.rowData}
           queryInputObj={queryInputObj}
           maxWidth="1200px"
+          setParMsg={setMsg}
+          setParMsgTyp={setMsgTyp}
+          parMsg={msg}
+          parMsgTyp={msgTyp}
         />
       </div>
     </>
@@ -393,7 +397,10 @@ const CreateUser = () => {
 export default CreateUser;
 export const CreateModal = ({
   open,
-
+  parMsgTyp,
+  parMsg,
+  setParMsg,
+  setParMsgTyp,
   onClose,
 
   mode,
@@ -448,6 +455,10 @@ export const CreateModal = ({
           setMsgTyp={setMsgTyp}
           errExp={errExp}
           set_errExp={set_errExp}
+          setParMsg={setParMsg}
+          setParMsgTyp={setParMsgTyp}
+          parMsg={parMsg}
+          parMsgTyp={parMsgTyp}
         />
       </DialogContent>
       <DialogActions sx={{ p: "1.25rem" }}></DialogActions>

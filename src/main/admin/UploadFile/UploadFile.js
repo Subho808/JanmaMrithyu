@@ -572,6 +572,10 @@ const UploadFiles = () => {
         data={tableData}
         setData={setTableData}
         rowData={createModalOpen.rowData}
+        setParMsg={setMsg}
+          setParMsgTyp={setMsgTyp}
+          parMsg={msg}
+          parMsgTyp={msgTyp}
       />
     </>
   );
@@ -590,6 +594,10 @@ export const CreateNewAccountModal = ({
   data,
   rowData,
   index,
+  parMsgTyp,
+  parMsg,
+  setParMsg,
+  setParMsgTyp,
 }) => {
   const [msg, setMsg] = useState("");
   const [msgTyp, setMsgTyp] = useState("");
@@ -662,6 +670,10 @@ export const CreateNewAccountModal = ({
           setMsg={setMsg}
           msgTyp={msgTyp}
           setMsgTyp={setMsgTyp}
+          setParMsg={setParMsg}
+          setParMsgTyp={setParMsgTyp}
+          parMsg={parMsg}
+          parMsgTyp={parMsgTyp}
         />
       </DialogContent>
       <DialogActions sx={{ p: "1.25rem" }}></DialogActions>
