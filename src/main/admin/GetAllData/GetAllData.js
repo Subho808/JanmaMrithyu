@@ -28,7 +28,13 @@ const GetAllRecords = () => {
   // Query Start..............
   const postQuery = async (e) => {
     e.preventDefault();
-
+  
+    const token = getApiToken();
+    if (!token) {
+      setMsg("Authorization token not available. Please log in again.");
+      setMsgTyp("AE");
+      return;
+    }
     await axios
       .post(
         process.env.REACT_APP_API_URL_PREFIX + `/api/v1/getUpldCertificateNo`,
@@ -49,10 +55,11 @@ const GetAllRecords = () => {
       })
       .catch((error) => {
         console.log(error);
-        setMsg(error);
+        setMsg(error.message || "An error occurred");
         setMsgTyp("AE");
       });
   };
+  
 
   // Query end...............
 

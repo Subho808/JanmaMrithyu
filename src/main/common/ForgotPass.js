@@ -109,7 +109,10 @@ export default function ForgotPass() {
       let url = `${process.env.REACT_APP_API_URL_PREFIX}/api/v1/auth/reset-password?newPassword=${formData.newPassword}&token=${formData.token}`;
       await axios
         .post(url)
-        .then((response) => {})
+        .then((response) => {
+          if(response)
+          navigate(process.env.PUBLIC_URL + "/");
+        })
         .catch((error) => {
             set_errorMsg({
                 ...errorMsg,
